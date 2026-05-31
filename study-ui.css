@@ -1,0 +1,261 @@
+:root {
+  --study-bg: #080b10;
+  --study-surface: #101722;
+  --study-surface-2: #162131;
+  --study-border: #26364c;
+  --study-text: #e7edf6;
+  --study-muted: #91a0b5;
+  --study-accent: #56c2ff;
+  --study-green: #67e8a8;
+  --study-amber: #ffcf66;
+  --study-rose: #ff7f8f;
+  --study-shadow: rgba(0, 0, 0, 0.28);
+}
+
+html {
+  scroll-padding-top: 22px;
+}
+
+body {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(86, 194, 255, 0.16), transparent 28rem),
+    radial-gradient(circle at 86% 14%, rgba(103, 232, 168, 0.12), transparent 28rem),
+    linear-gradient(135deg, #080b10 0%, #10131b 48%, #0b1118 100%) !important;
+  color: var(--study-text) !important;
+  letter-spacing: 0 !important;
+}
+
+body::selection {
+  background: rgba(86, 194, 255, 0.32);
+}
+
+.study-home {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid rgba(86, 194, 255, 0.44);
+  border-radius: 8px;
+  background: rgba(16, 23, 34, 0.88);
+  color: var(--study-text) !important;
+  font: 800 13px/1.1 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-decoration: none;
+  box-shadow: 0 18px 42px var(--study-shadow);
+  backdrop-filter: blur(12px);
+}
+
+.study-home:hover {
+  background: var(--study-accent);
+  color: #061018 !important;
+}
+
+.banner,
+.hero,
+.header,
+header {
+  background:
+    radial-gradient(circle at 15% 12%, rgba(86, 194, 255, 0.18), transparent 28rem),
+    radial-gradient(circle at 82% 18%, rgba(103, 232, 168, 0.13), transparent 26rem),
+    linear-gradient(135deg, #080b10 0%, #10131b 48%, #0b1118 100%) !important;
+  border-bottom: 1px solid var(--study-border) !important;
+}
+
+.banner h1,
+.hero h1,
+header h1,
+.header h1,
+.sec-hdr h2,
+.section-header h2,
+.topic-title-block h2 {
+  letter-spacing: 0 !important;
+}
+
+.banner-label,
+.hero-eyebrow,
+.unit-badge,
+.tag,
+.section-label,
+.section-num,
+.unit-tag,
+.nav-section-label,
+.nav-group-lbl {
+  letter-spacing: 0.12em !important;
+}
+
+.main,
+.content {
+  max-width: 1120px;
+}
+
+.card,
+.mc,
+.cheat-card,
+.callout,
+.formula,
+.diagram,
+.diagram-box,
+.quick-ref,
+.fw-card,
+.spec-item,
+.bv-card,
+.tl-stage,
+.topic,
+.keybox,
+.compare-box,
+.exam-alert,
+.p-card,
+.note-box {
+  border-radius: 8px !important;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
+}
+
+.card,
+.mc,
+.cheat-card,
+.callout,
+.diagram,
+.diagram-box,
+.quick-ref,
+.fw-card,
+.spec-item,
+.bv-card,
+.tl-stage,
+.topic,
+.keybox,
+.compare-box,
+.exam-alert,
+.p-card {
+  border-color: var(--study-border) !important;
+}
+
+.card,
+.mc,
+.cheat-card,
+.quick-ref,
+.fw-card,
+.spec-item,
+.bv-card,
+.tl-stage,
+.topic,
+.p-card {
+  background: linear-gradient(180deg, rgba(22, 33, 49, 0.95), rgba(16, 23, 34, 0.98)) !important;
+}
+
+.section,
+.topic {
+  scroll-margin-top: 20px;
+}
+
+.section-header,
+.sec-hdr,
+.topic-header {
+  border-color: var(--study-border) !important;
+}
+
+.card-title,
+.subsec-title,
+.callout-label,
+.formula .label {
+  color: var(--study-accent) !important;
+}
+
+.sidebar,
+body > nav {
+  background: rgba(16, 23, 34, 0.94) !important;
+  border-color: var(--study-border) !important;
+  backdrop-filter: blur(12px);
+}
+
+.sidebar a,
+.sidebar .nav-item,
+body > nav a {
+  border-radius: 7px !important;
+}
+
+.sidebar a:hover,
+.sidebar .nav-item:hover,
+.sidebar .nav-item.active,
+body > nav a:hover {
+  background: rgba(86, 194, 255, 0.12) !important;
+  color: var(--study-text) !important;
+}
+
+table,
+.tbl,
+.spec-table {
+  border-color: var(--study-border) !important;
+  overflow: hidden;
+}
+
+th {
+  background: rgba(86, 194, 255, 0.1) !important;
+}
+
+td,
+th {
+  border-color: var(--study-border) !important;
+}
+
+.formula {
+  background: #07111d !important;
+  border-color: rgba(86, 194, 255, 0.42) !important;
+  color: #b9dcff !important;
+}
+
+.steps li,
+.key-list li,
+.step {
+  border-radius: 8px !important;
+}
+
+.badge,
+.hot-tag,
+.nav-badge,
+.exam-badge,
+.tag,
+.fw-tag {
+  border-radius: 999px !important;
+}
+
+@media print {
+  .sidebar,
+  body > nav,
+  .study-home {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .main,
+  .content {
+    margin: 0 !important;
+    max-width: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .study-home {
+    right: 12px;
+    bottom: 12px;
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .card,
+  .mc,
+  .callout,
+  .topic-body,
+  .keybox {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
