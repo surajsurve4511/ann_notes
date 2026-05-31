@@ -53,6 +53,7 @@
     flex-direction: column;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    transition: width .28s ease, min-width .28s ease, transform .28s ease, padding .28s ease, border-color .28s ease;
   }
 
   .nav-brand {
@@ -122,6 +123,40 @@
     max-width: 900px;
     padding: 48px 56px;
     overflow-x: hidden;
+    transition: padding .28s ease;
+  }
+  .sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 230;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sidebar-toggle:hover {
+    color: var(--teal);
+    border-color: var(--teal);
+  }
+  body.sidebar-hidden nav {
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    border-right-color: transparent;
+    transform: translateX(-100%);
+  }
+  body.sidebar-hidden nav > * {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* ── HERO ── */
@@ -839,10 +874,26 @@
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 900px) {
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 150;
+      width: min(280px, 85vw);
+      min-width: min(280px, 85vw);
+      box-shadow: 8px 0 20px rgba(0,0,0,0.35);
+    }
+    main { padding: 24px 20px; }
+    .sidebar-toggle { top: 12px; left: 12px; }
+  }
 </style>
 </head>
 <body>
 <a class="study-home" href="index.html" aria-label="Back to ANN study homepage">ANN Home</a>
+<button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">✕ Hide Sidebar</button>
 
 <!-- ══ SIDEBAR ══ -->
 <nav>
@@ -1908,5 +1959,18 @@
   </div>
 
 </main>
+<script>
+const sidebarToggleButton = document.getElementById('sidebarToggle');
+function updateSidebarToggleState() {
+  const hidden = document.body.classList.contains('sidebar-hidden');
+  sidebarToggleButton.textContent = hidden ? '☰ Show Sidebar' : '✕ Hide Sidebar';
+  sidebarToggleButton.setAttribute('aria-expanded', String(!hidden));
+}
+sidebarToggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('sidebar-hidden');
+  updateSidebarToggleState();
+});
+updateSidebarToggleState();
+</script>
 </body>
 </html>

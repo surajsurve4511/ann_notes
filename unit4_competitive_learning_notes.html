@@ -111,6 +111,7 @@
     top: 0;
     height: 100vh;
     overflow-y: auto;
+    transition: width .28s ease, transform .28s ease, padding .28s ease, border-color .28s ease;
   }
   .sidebar-title {
     font-family: 'IBM Plex Mono', monospace;
@@ -155,6 +156,38 @@
     flex: 1;
     padding: 48px 56px;
     max-width: 900px;
+    transition: max-width .28s ease, padding .28s ease;
+  }
+  .sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 230;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sidebar-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  body.sidebar-hidden .sidebar {
+    width: 0;
+    padding: 0;
+    border-right-color: transparent;
+    transform: translateX(-100%);
+  }
+  body.sidebar-hidden .sidebar > * {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* ── SECTIONS ── */
@@ -398,9 +431,17 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    .sidebar { display: none; }
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: min(280px, 85vw);
+      z-index: 150;
+      box-shadow: 8px 0 20px rgba(0,0,0,0.35);
+    }
     .main { padding: 24px 20px; }
     .grid-2 { grid-template-columns: 1fr; }
+    .sidebar-toggle { top: 12px; left: 12px; }
   }
 
   /* ── SCROLL BAR ── */
@@ -411,6 +452,7 @@
 </head>
 <body>
 <a class="study-home" href="index.html" aria-label="Back to ANN study homepage">ANN Home</a>
+<button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">✕ Hide Sidebar</button>
 
 <!-- TOP BANNER -->
 <div class="banner">
@@ -1147,6 +1189,20 @@
 
 </main>
 </div>
+
+<script>
+const sidebarToggleButton = document.getElementById('sidebarToggle');
+function updateSidebarToggleState() {
+  const hidden = document.body.classList.contains('sidebar-hidden');
+  sidebarToggleButton.textContent = hidden ? '☰ Show Sidebar' : '✕ Hide Sidebar';
+  sidebarToggleButton.setAttribute('aria-expanded', String(!hidden));
+}
+sidebarToggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('sidebar-hidden');
+  updateSidebarToggleState();
+});
+updateSidebarToggleState();
+</script>
 
 </body>
 </html>
