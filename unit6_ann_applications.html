@@ -40,6 +40,64 @@
     line-height: 1.85;
     min-height: 100vh;
   }
+  .sidebar {
+    width: 240px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 22px 0;
+    z-index: 140;
+    transition: transform .28s ease;
+  }
+  .sidebar-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 18px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 8px 18px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .sidebar a:hover {
+    color: var(--text);
+    background: var(--card2);
+    border-left-color: var(--gold);
+  }
+  .sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 230;
+    background: var(--card2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sidebar-toggle:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
 
   /* ── HEADER ── */
   header {
@@ -161,6 +219,15 @@
     flex-direction: column;
     gap: 44px;
   }
+  header, .priority-section, main, footer {
+    margin-left: 240px;
+    transition: margin-left .28s ease;
+  }
+  body.sidebar-hidden .sidebar { transform: translateX(-100%); }
+  body.sidebar-hidden header,
+  body.sidebar-hidden .priority-section,
+  body.sidebar-hidden main,
+  body.sidebar-hidden footer { margin-left: 0; }
 
   /* ── TOPIC CARD ── */
   .topic {
@@ -578,6 +645,10 @@
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
   @media (max-width: 680px) {
+    .sidebar {
+      width: min(280px, 85vw);
+      box-shadow: 8px 0 20px rgba(0,0,0,0.35);
+    }
     header { padding: 36px 20px 28px; }
     main { padding: 0 16px; }
     .priority-section { padding: 0 16px; }
@@ -586,11 +657,23 @@
     .compare-grid { grid-template-columns: 1fr; }
     .texture-grid { grid-template-columns: repeat(2, 1fr); }
     header::after { display: none; }
+    .sidebar-toggle { top: 12px; left: 12px; }
   }
 </style>
 </head>
 <body>
 <a class="study-home" href="index.html" aria-label="Back to ANN study homepage">ANN Home</a>
+<button class="sidebar-toggle" id="sidebarToggle" type="button" aria-expanded="true">✕ Hide Sidebar</button>
+<nav class="sidebar">
+  <div class="sidebar-title">Quick Topics</div>
+  <a href="#olympic">Olympic 2000 Classification</a>
+  <a href="#neocognitron">Neocognitron</a>
+  <a href="#char-recognition">Character Recognition</a>
+  <a href="#nettalk">NET Talk</a>
+  <a href="#cv-recognition">CV Recognition</a>
+  <a href="#texture-classification">Texture Classification</a>
+  <a href="#texture-segmentation">Texture Segmentation</a>
+</nav>
 
 <!-- ═══════════════════ HEADER ═══════════════════ -->
 <header>
@@ -1229,6 +1312,23 @@
 <footer>
   Unit VI &nbsp;·&nbsp; Applications of ANN &nbsp;·&nbsp; Study Notes &nbsp;·&nbsp; All topics covered
 </footer>
+
+<script>
+const sidebarToggleButton = document.getElementById('sidebarToggle');
+function updateSidebarToggleState() {
+  const hidden = document.body.classList.contains('sidebar-hidden');
+  sidebarToggleButton.textContent = hidden ? '☰ Show Sidebar' : '✕ Hide Sidebar';
+  sidebarToggleButton.setAttribute('aria-expanded', String(!hidden));
+}
+sidebarToggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('sidebar-hidden');
+  updateSidebarToggleState();
+});
+if (window.matchMedia('(max-width: 680px)').matches) {
+  document.body.classList.add('sidebar-hidden');
+}
+updateSidebarToggleState();
+</script>
 
 </body>
 </html>
