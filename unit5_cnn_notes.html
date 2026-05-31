@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit V – Convolutional Neural Networks | Exam Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1f2d45;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --blue: #60a5fa;
+    --teal: #2dd4bf;
+    --amber: #fbbf24;
+    --rose: #fb7185;
+    --violet: #a78bfa;
+    --green: #4ade80;
+    --orange: #fb923c;
+    --hot: #f43f5e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  nav {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .nav-brand {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .nav-brand .unit-tag {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--teal);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .nav-brand h2 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .nav-section-label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 12px 20px 6px;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 20px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+
+  nav a:hover { color: var(--text); background: var(--surface2); border-left-color: var(--teal); }
+  nav a .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  nav a .hot-tag {
+    margin-left: auto;
+    font-size: 9px;
+    background: var(--hot);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    max-width: 900px;
+    padding: 48px 56px;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 48px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: var(--teal); }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 580px;
+    font-style: italic;
+  }
+
+  /* ── HOT TOPICS BANNER ── */
+  .hot-banner {
+    background: linear-gradient(135deg, #1a0a0f 0%, #1f0d20 100%);
+    border: 1px solid #4a1025;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+
+  .hot-banner h3 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hot-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hot-pills span {
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: rgba(244, 63, 94, 0.15);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    color: #fda4af;
+  }
+
+  .hot-pills span.high { background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.3); color: var(--amber); }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 60px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .section h2 .accent { color: var(--teal); }
+  .section h2 .accent-amber { color: var(--amber); }
+  .section h2 .accent-violet { color: var(--violet); }
+  .section h2 .accent-rose { color: var(--rose); }
+  .section h2 .accent-green { color: var(--green); }
+  .section h2 .accent-orange { color: var(--orange); }
+
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .badge-hot { background: rgba(244,63,94,0.15); color: var(--rose); border: 1px solid rgba(244,63,94,0.3); }
+  .badge-2024 { background: rgba(96,165,250,0.12); color: var(--blue); border: 1px solid rgba(96,165,250,0.25); }
+  .badge-2025 { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid rgba(45,212,191,0.25); }
+  .badge-2023 { background: rgba(167,139,250,0.1); color: var(--violet); border: 1px solid rgba(167,139,250,0.25); }
+
+  p { margin-bottom: 14px; color: var(--text); }
+
+  h3 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--amber);
+    margin: 24px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  h3::before { content: '▸'; color: var(--amber); font-size: 12px; }
+
+  h4 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal);
+    margin: 16px 0 6px;
+  }
+
+  ul, ol { padding-left: 20px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; color: var(--text); }
+  li strong { color: #fff; font-weight: 600; }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: #0d1929;
+    border: 1px solid #1a3a5c;
+    border-left: 3px solid var(--blue);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #93c5fd;
+    line-height: 2;
+  }
+
+  .formula .label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--teal); }
+  .card h4 { margin-top: 0; font-size: 14px; }
+  .card p { font-size: 13px; margin-bottom: 0; color: var(--muted); }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    overflow-x: auto;
+  }
+
+  .arch-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .arch-box {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    min-width: 70px;
+    white-space: nowrap;
+  }
+
+  .arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .arch-arrow {
+    color: var(--muted);
+    font-size: 18px;
+    margin-top: -16px;
+    align-self: center;
+  }
+
+  .box-input    { background: rgba(96,165,250,0.15);  border: 1px solid rgba(96,165,250,0.4);  color: var(--blue); }
+  .box-conv     { background: rgba(45,212,191,0.15);  border: 1px solid rgba(45,212,191,0.4);  color: var(--teal); }
+  .box-relu     { background: rgba(251,191,36,0.15);  border: 1px solid rgba(251,191,36,0.4);  color: var(--amber); }
+  .box-pool     { background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.4); color: var(--violet); }
+  .box-flat     { background: rgba(251,146,60,0.15);  border: 1px solid rgba(251,146,60,0.4);  color: var(--orange); }
+  .box-fc       { background: rgba(74,222,128,0.15);  border: 1px solid rgba(74,222,128,0.4);  color: var(--green); }
+  .box-soft     { background: rgba(251,113,133,0.15); border: 1px solid rgba(251,113,133,0.4); color: var(--rose); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    display: flex;
+    gap: 14px;
+  }
+
+  .callout-icon { font-size: 20px; flex-shrink: 0; line-height: 1.5; }
+  .callout-body { flex: 1; }
+  .callout-body strong { font-family: 'Raleway', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .callout-body p { margin: 0; font-size: 13.5px; }
+
+  .callout-tip    { background: rgba(45,212,191,0.08);  border: 1px solid rgba(45,212,191,0.2);  }
+  .callout-tip .callout-body strong    { color: var(--teal); }
+  .callout-warn   { background: rgba(251,191,36,0.08);  border: 1px solid rgba(251,191,36,0.2);  }
+  .callout-warn .callout-body strong   { color: var(--amber); }
+  .callout-exam   { background: rgba(244,63,94,0.08);   border: 1px solid rgba(244,63,94,0.2);   }
+  .callout-exam .callout-body strong   { color: var(--rose); }
+
+  /* ── COMPARISON TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13.5px;
+  }
+
+  th {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+
+  td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td strong { color: #fff; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* ── LENET ARCH ── */
+  .lenet-grid {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 12px 0;
+  }
+
+  .ln-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .ln-box {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 10px 8px;
+    border-radius: 6px;
+    text-align: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+  }
+
+  .ln-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .ln-arrow { color: var(--muted); font-size: 16px; flex-shrink: 0; }
+
+  /* ── QUICK REF CARD ── */
+  .quick-ref {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+
+  .quick-ref h3 {
+    color: var(--violet);
+    margin-top: 0;
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .quick-ref h3::before { color: var(--violet); }
+
+  .kv-list { display: flex; flex-direction: column; gap: 8px; }
+  .kv { display: flex; gap: 12px; align-items: baseline; }
+  .kv .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+  .kv .v { font-size: 13px; color: var(--text); }
+
+  /* ── MODEL SPECS ── */
+  .model-specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .spec-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .spec-item .spec-val {
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--amber);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .spec-item .spec-label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── RESIDUAL BLOCK ── */
+  .res-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    text-align: center;
+  }
+
+  .res-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .res-box {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .res-skip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--rose);
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* ── POOLING VISUAL ── */
+  .pool-visual {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: center;
+    margin: 16px 0;
+  }
+
+  .pool-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 36px);
+    gap: 2px;
+    justify-content: center;
+  }
+
+  .pool-cell {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .pool-cell.highlight { background: rgba(45,212,191,0.2); border-color: var(--teal); color: #fff; font-weight: 700; }
+  .pool-cell.out { background: rgba(251,191,36,0.2); border-color: var(--amber); color: var(--amber); font-weight: 700; }
+
+  .pool-out-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 44px);
+    gap: 3px;
+    justify-content: center;
+  }
+
+  .pool-out-cell {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 6px;
+    background: rgba(167,139,250,0.15);
+    border: 1px solid rgba(167,139,250,0.4);
+    color: var(--violet);
+  }
+
+  /* ── BIAS VARIANCE ── */
+  .bv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .bv-card {
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .bv-high-bias { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); }
+  .bv-high-var  { background: rgba(244,63,94,0.08);  border: 1px solid rgba(244,63,94,0.25);  }
+  .bv-both      { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); }
+  .bv-good      { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.25); }
+
+  .bv-card h4 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--text);
+  }
+
+  .bv-high-bias h4 { color: var(--blue); }
+  .bv-high-var h4  { color: var(--rose); }
+  .bv-both h4      { color: var(--amber); }
+  .bv-good h4      { color: var(--green); }
+
+  .bv-stats {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .bv-card ul { padding-left: 16px; }
+  .bv-card li { font-size: 13px; color: var(--muted); margin-bottom: 3px; }
+
+  /* ── SOFTMAX TABLE ── */
+  .softmax-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .sf-box {
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 90px;
+  }
+
+  /* ── TRANSFER LEARNING FLOW ── */
+  .tl-stages {
+    display: flex;
+    gap: 0;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .tl-stage {
+    flex: 1;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .tl-stage:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 18px;
+    z-index: 1;
+  }
+
+  .tl-stage h4 {
+    font-size: 11px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tl-stage p { font-size: 12px; margin: 0; color: var(--muted); }
+  .tl-stage-1 { background: rgba(96,165,250,0.08); }
+  .tl-stage-2 { background: rgba(45,212,191,0.08); }
+  .tl-stage-3 { background: rgba(251,191,36,0.08); }
+
+  /* ── FRAMEWORKS GRID ── */
+  .fw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .fw-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .fw-name {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .fw-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .fw-tag {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* ── VGG CONV STACK ── */
+  .vgg-stacks {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 0;
+  }
+
+  .vgg-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .vgg-layer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .vgg-pool {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+    background: rgba(167,139,250,0.15);
+    border: 1px solid rgba(167,139,250,0.35);
+    color: var(--violet);
+  }
+
+  .vgg-fc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+    background: rgba(74,222,128,0.12);
+    border: 1px solid rgba(74,222,128,0.3);
+    color: var(--green);
+  }
+
+  .vgg-blk-label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .vgg-arrow { color: var(--muted); font-size: 18px; align-self: center; flex-shrink: 0; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav>
+  <div class="nav-brand">
+    <span class="unit-tag">Deep Learning</span>
+    <h2>Unit V – CNN</h2>
+  </div>
+
+  <div class="nav-section-label">Core Architecture</div>
+  <a href="#cnn-arch"><span class="dot" style="background:var(--teal)"></span>CNN Architecture<span class="hot-tag">🔥</span></a>
+  <a href="#conv-layer"><span class="dot" style="background:var(--teal)"></span>Convolution Layer</a>
+  <a href="#pooling"><span class="dot" style="background:var(--violet)"></span>Pooling Layer<span class="hot-tag">🔥</span></a>
+  <a href="#padding"><span class="dot" style="background:var(--blue)"></span>Padding & Stride</a>
+  <a href="#volumes"><span class="dot" style="background:var(--blue)"></span>Conv over Volumes</a>
+  <a href="#flatten"><span class="dot" style="background:var(--orange)"></span>Flattening Layer</a>
+  <a href="#softmax"><span class="dot" style="background:var(--rose)"></span>SoftMax Regression</a>
+
+  <div class="nav-section-label">Training Concepts</div>
+  <a href="#bias-variance"><span class="dot" style="background:var(--amber)"></span>Bias & Variance<span class="hot-tag">🔥</span></a>
+  <a href="#transfer"><span class="dot" style="background:var(--green)"></span>Transfer Learning</a>
+  <a href="#multitask"><span class="dot" style="background:var(--green)"></span>Multi-task Learning</a>
+  <a href="#e2e"><span class="dot" style="background:var(--muted)"></span>End-to-End DL</a>
+  <a href="#frameworks"><span class="dot" style="background:var(--blue)"></span>DL Frameworks<span class="hot-tag">🔥</span></a>
+
+  <div class="nav-section-label">CNN Models</div>
+  <a href="#lenet"><span class="dot" style="background:var(--violet)"></span>LeNet-5<span class="hot-tag">🔥</span></a>
+  <a href="#alexnet"><span class="dot" style="background:var(--rose)"></span>AlexNet<span class="hot-tag">🔥</span></a>
+  <a href="#vgg"><span class="dot" style="background:var(--amber)"></span>VGG-16<span class="hot-tag">🔥</span></a>
+  <a href="#resnet"><span class="dot" style="background:var(--green)"></span>ResNet<span class="hot-tag">🔥</span></a>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Exam Preparation Notes</div>
+    <h1>Convolutional<br><span>Neural Networks</span></h1>
+    <p>Complete study guide for Unit V covering all architectures, layers, training concepts, and landmark CNN models.</p>
+  </div>
+
+  <!-- HOT TOPICS -->
+  <div class="hot-banner">
+    <h3>🔥 Most Probable Exam Questions</h3>
+    <div class="hot-pills">
+      <span>CNN Architecture</span>
+      <span>Pooling Layer</span>
+      <span>Bias-Variance Tradeoff</span>
+      <span>AlexNet</span>
+      <span class="high">VGG-16</span>
+      <span class="high">ResNet</span>
+      <span>LeNet-5</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 1. CNN ARCHITECTURE -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="cnn-arch">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2><span class="accent">CNN</span> Architecture</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2024">2024 ✓</span>
+      <span class="badge badge-2025">2025 ✓</span>
+    </div>
+
+    <p>A <strong>Convolutional Neural Network (CNN)</strong> is a class of deep neural network designed specifically to process data with grid-like topology — most commonly images. Unlike traditional MLPs, CNNs exploit <em>spatial locality</em> and <em>parameter sharing</em> to dramatically reduce the number of parameters while preserving spatial structure.</p>
+
+    <h3>Standard CNN Pipeline</h3>
+    <div class="arch-diagram">
+      <div class="arch-block"><div class="arch-box box-input">INPUT</div><div class="arch-label">Image<br/>n×n×C</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-conv">CONV</div><div class="arch-label">Filters<br/>f×f×C</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-relu">ReLU</div><div class="arch-label">Activation<br/>max(0,z)</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-pool">POOL</div><div class="arch-label">Subsampling<br/>↓ spatial</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-conv">CONV</div><div class="arch-label">More<br/>filters</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-relu">ReLU</div><div class="arch-label"></div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-pool">POOL</div><div class="arch-label"></div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-flat">FLATTEN</div><div class="arch-label">1D vector</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-fc">FC</div><div class="arch-label">Dense<br/>layer</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="arch-box box-soft">SOFTMAX</div><div class="arch-label">Probabilities<br/>output</div></div>
+    </div>
+
+    <h3>Key Properties of CNNs</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Local Connectivity</h4>
+        <p>Each neuron connects only to a small local region of the input (the receptive field), reducing parameters compared to fully connected layers.</p>
+      </div>
+      <div class="card">
+        <h4>Parameter Sharing</h4>
+        <p>The same filter (set of weights) slides across the entire image, meaning features learned in one region apply everywhere.</p>
+      </div>
+      <div class="card">
+        <h4>Translation Invariance</h4>
+        <p>Because the same filter is applied everywhere, CNNs can detect features regardless of their position in the image.</p>
+      </div>
+      <div class="card">
+        <h4>Hierarchical Features</h4>
+        <p>Early layers detect edges → middle layers detect shapes → deep layers detect complex objects.</p>
+      </div>
+    </div>
+
+    <h3>Layer Types Summary</h3>
+    <table>
+      <tr><th>Layer</th><th>Function</th><th>Has Parameters?</th></tr>
+      <tr><td><strong>Convolutional</strong></td><td>Extracts features using learnable filters</td><td>✅ Yes (W, b)</td></tr>
+      <tr><td><strong>Activation (ReLU)</strong></td><td>Introduces non-linearity: max(0, z)</td><td>❌ No</td></tr>
+      <tr><td><strong>Pooling</strong></td><td>Downsamples spatial dimensions</td><td>❌ No</td></tr>
+      <tr><td><strong>Flattening</strong></td><td>Reshapes 3D tensor to 1D vector</td><td>❌ No</td></tr>
+      <tr><td><strong>Fully Connected</strong></td><td>Final classification/regression head</td><td>✅ Yes (W, b)</td></tr>
+      <tr><td><strong>Softmax</strong></td><td>Converts logits to class probabilities</td><td>❌ No</td></tr>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 2. CONVOLUTION LAYER -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="conv-layer">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2><span class="accent">Convolution</span> Layer</h2>
+    </div>
+
+    <p>The convolution layer is the core building block of a CNN. It applies a set of learnable <strong>filters (kernels)</strong> to the input by sliding them across the spatial dimensions and computing dot products, producing <strong>feature maps</strong>.</p>
+
+    <h3>How Convolution Works</h3>
+    <p>A filter F of size f×f is slid across the input X. At each position, element-wise multiplication is performed and the results are summed, adding a bias b:</p>
+
+    <div class="formula">
+      <span class="label">Convolution Operation</span>
+      Z[i, j] = Σ Σ W[m, n] · X[i·s + m, j·s + n] + b<br><br>
+      <span style="color:var(--teal)">where:</span>  s = stride,  W = filter weights,  b = bias
+    </div>
+
+    <div class="formula">
+      <span class="label">Output Dimension Formula</span>
+      n_out = ⌊ (n_in + 2·p − f) / s ⌋ + 1<br><br>
+      <span style="color:var(--teal)">where:</span>  n_in = input size,  p = padding,  f = filter size,  s = stride
+    </div>
+
+    <h3>Number of Parameters in a Conv Layer</h3>
+    <div class="formula">
+      <span class="label">Parameter Count</span>
+      Parameters = (f × f × n_C_prev + 1) × n_C<br><br>
+      <span style="color:var(--teal)">where:</span>  f = filter size,  n_C_prev = input channels,  n_C = number of filters<br>
+      <span style="color:var(--amber)">+1 accounts for the bias term per filter</span>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Key Insight</strong>
+        <p>Regardless of input image size, the number of parameters in a conv layer depends only on filter size and number of channels — not on the image dimensions. This is the power of parameter sharing.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 3. POOLING LAYER -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="pooling">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2><span class="accent-violet">Pooling</span> Layer</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2023">2023 ✓</span>
+      <span class="badge badge-2024">2024 ✓</span>
+    </div>
+
+    <p>Pooling layers <strong>reduce the spatial dimensions</strong> of feature maps, decreasing computation and providing a form of translational invariance. They have <strong>no learnable parameters</strong> — they are purely a downsampling operation.</p>
+
+    <h3>Types of Pooling</h3>
+
+    <h4>Max Pooling (Most Common)</h4>
+    <p>Takes the <strong>maximum value</strong> in each pooling window. Preserves the most prominent features.</p>
+    <div class="pool-visual">
+      <div>
+        <div style="font-family:'Raleway',sans-serif;font-size:11px;color:var(--muted);text-align:center;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">Input (4×4)</div>
+        <div class="pool-grid">
+          <div class="pool-cell highlight">9</div><div class="pool-cell">2</div><div class="pool-cell highlight">8</div><div class="pool-cell">4</div>
+          <div class="pool-cell">6</div><div class="pool-cell">4</div><div class="pool-cell">3</div><div class="pool-cell highlight">6</div>
+          <div class="pool-cell highlight">5</div><div class="pool-cell">2</div><div class="pool-cell highlight">7</div><div class="pool-cell">1</div>
+          <div class="pool-cell">8</div><div class="pool-cell">7</div><div class="pool-cell">3</div><div class="pool-cell">4</div>
+        </div>
+      </div>
+      <div style="text-align:center;color:var(--muted)">
+        <div style="font-size:20px;">→</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal)">2×2 pool<br/>stride=2</div>
+      </div>
+      <div>
+        <div style="font-family:'Raleway',sans-serif;font-size:11px;color:var(--muted);text-align:center;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">Output (2×2)</div>
+        <div class="pool-out-grid">
+          <div class="pool-out-cell">9</div><div class="pool-out-cell">8</div>
+          <div class="pool-out-cell">8</div><div class="pool-out-cell">7</div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Average Pooling</h4>
+    <p>Takes the <strong>average value</strong> in each pooling window. More common in later layers (e.g., Global Average Pooling before FC).</p>
+
+    <h3>Key Properties of Pooling</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>No Parameters</h4>
+        <p>Zero learnable weights. Just a fixed mathematical operation — max or average over a window.</p>
+      </div>
+      <div class="card">
+        <h4>Reduces Dimensions</h4>
+        <p>With pool size f=2, stride s=2, the spatial dimensions are halved: n × n → n/2 × n/2.</p>
+      </div>
+      <div class="card">
+        <h4>Depth Unchanged</h4>
+        <p>Pooling operates independently on each channel. The number of channels (depth) stays the same after pooling.</p>
+      </div>
+    </div>
+
+    <div class="formula">
+      <span class="label">Pooling Output Dimension</span>
+      n_out = ⌊ (n_in − f) / s ⌋ + 1<br>
+      <span style="color:var(--amber)">(same formula as conv but typically no padding in pooling)</span>
+    </div>
+
+    <div class="callout callout-exam">
+      <div class="callout-icon">📝</div>
+      <div class="callout-body">
+        <strong>Exam Tip</strong>
+        <p>Always mention: Pooling has NO learnable parameters. Max pooling retains the dominant feature in the region, making it robust to small translations in the input.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 4. PADDING & STRIDE -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="padding">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2><span class="accent">Padding</span> &amp; Strided Convolutions</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-2023">2023 ✓</span>
+    </div>
+
+    <h3>Padding</h3>
+    <p>Padding adds extra pixels (usually zeros) around the border of the input before convolution. This addresses two problems: (1) the output shrinks with each conv layer, and (2) corner/edge pixels are used far less than central pixels.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4 style="color:var(--rose)">Valid Padding (p=0)</h4>
+        <p>No padding applied. Output is smaller than input.</p>
+        <div class="formula" style="margin-top:10px;padding:10px 14px;">n_out = n − f + 1</div>
+      </div>
+      <div class="card">
+        <h4 style="color:var(--teal)">Same Padding</h4>
+        <p>Output has the same spatial dimensions as input.</p>
+        <div class="formula" style="margin-top:10px;padding:10px 14px;">p = (f − 1) / 2</div>
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Why odd-sized filters?</strong>
+        <p>Filters in CNNs are almost always odd-sized (1×1, 3×3, 5×5, 7×7). This ensures that Same padding p = (f−1)/2 is always an integer, and there is a defined center pixel for the filter.</p>
+      </div>
+    </div>
+
+    <h3>Strided Convolutions</h3>
+    <p>The <strong>stride s</strong> controls how many pixels the filter moves at each step. A stride of 1 moves 1 pixel at a time (dense), while stride 2 skips every other position (downsampling).</p>
+
+    <div class="quick-ref">
+      <h3>Stride Effects at a Glance</h3>
+      <div class="kv-list">
+        <div class="kv"><span class="k">Stride s = 1</span><span class="v">Dense, more computation, larger output</span></div>
+        <div class="kv"><span class="k">Stride s = 2</span><span class="v">Downsamples by ×2, reduces computation</span></div>
+        <div class="kv"><span class="k">Large stride</span><span class="v">Can replace pooling for downsampling</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 5. CONVOLUTIONS OVER VOLUMES -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="volumes">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Convolutions over <span class="accent">Volumes</span></h2>
+    </div>
+
+    <p>Real images are 3-dimensional: height × width × channels (e.g., RGB = 3 channels). Filters must also be 3-dimensional with the same depth as the input.</p>
+
+    <div class="formula">
+      <span class="label">3D Convolution</span>
+      Input:   n × n × n_C<br>
+      Filter:  f × f × n_C  (depth must match input depth)<br>
+      Output:  n_out × n_out × 1  (per filter)<br><br>
+      With n_C' filters → output: n_out × n_out × n_C'
+    </div>
+
+    <h3>Multiple Filters → Multiple Feature Maps</h3>
+    <p>Each filter detects a different kind of feature (vertical edges, horizontal edges, curves, etc.). The outputs of all filters are stacked depth-wise, creating a volume of feature maps.</p>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Critical Rule</strong>
+        <p>The filter depth must ALWAYS equal the input depth (n_C). A 3-channel RGB input needs f×f×3 filters. A 64-channel feature map needs f×f×64 filters.</p>
+      </div>
+    </div>
+
+    <h3>1×1 Convolutions (Network-in-Network)</h3>
+    <p>A 1×1×n_C filter acts on a single pixel across all channels. It's used to: (1) reduce or increase channel depth, (2) add nonlinearity via ReLU, and (3) compress feature maps cheaply (used in Inception and ResNet bottleneck layers).</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 6. FLATTENING LAYER -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="flatten">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2><span class="accent-orange">Flattening</span> Layer</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-2024">2024 ✓</span>
+    </div>
+
+    <p>The flattening layer acts as the <strong>bridge between convolutional layers and fully connected layers</strong>. It converts the 3D tensor output of the last pooling/conv layer into a 1D vector.</p>
+
+    <div class="formula">
+      <span class="label">Flatten Operation</span>
+      Input:  h × w × c  (3D feature map)<br>
+      Output: (h × w × c,)  (1D vector of length h·w·c)<br><br>
+      <span style="color:var(--amber)">Example: 7 × 7 × 512 → 25,088-dimensional vector</span>
+    </div>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>No Computation</strong>
+        <p>Flattening is purely a reshape operation — no weights, no activations, no learned parameters. It simply unrolls the multi-dimensional tensor into a flat array for the FC layers.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 7. SOFTMAX -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="softmax">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2><span class="accent-rose">SoftMax</span> Regression</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-2023">2023 ✓</span>
+    </div>
+
+    <p>SoftMax is the activation function used in the <strong>final output layer for multi-class classification</strong>. It converts a vector of raw logit scores into a probability distribution over C classes.</p>
+
+    <div class="formula">
+      <span class="label">SoftMax Function</span>
+      σ(z)_i = e^(z_i) / Σ(j=1 to C) e^(z_j)<br><br>
+      <span style="color:var(--teal)">Properties:</span><br>
+      → All outputs are in range (0, 1)<br>
+      → Sum of all outputs = 1<br>
+      → Largest z_i gets the highest probability
+    </div>
+
+    <div class="softmax-flow">
+      <div class="sf-box" style="background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.4);color:var(--blue)">Raw Logits<br/><small>z = [2.1, 0.5, 3.2]</small></div>
+      <span style="color:var(--muted);font-size:20px">→</span>
+      <div class="sf-box" style="background:rgba(45,212,191,0.15);border:1px solid rgba(45,212,191,0.4);color:var(--teal)">exp(z)<br/><small>[8.17, 1.65, 24.5]</small></div>
+      <span style="color:var(--muted);font-size:20px">→</span>
+      <div class="sf-box" style="background:rgba(251,113,133,0.15);border:1px solid rgba(251,113,133,0.4);color:var(--rose)">Probabilities<br/><small>[0.24, 0.05, 0.71]</small></div>
+    </div>
+
+    <h3>Loss Function: Cross-Entropy</h3>
+    <div class="formula">
+      <span class="label">Categorical Cross-Entropy Loss</span>
+      L = −Σ y_i · log(ŷ_i)<br><br>
+      <span style="color:var(--amber)">where y is the one-hot true label and ŷ is the predicted probability</span>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Sigmoid vs SoftMax</strong>
+        <p>Use <strong>Sigmoid</strong> for binary classification (outputs independent probabilities) and <strong>SoftMax</strong> for multi-class classification (outputs mutually exclusive probabilities that sum to 1).</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 8. BIAS & VARIANCE -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="bias-variance">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Bias &amp; <span class="accent-amber">Variance</span> Tradeoff</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2024">2024 ✓</span>
+      <span class="badge badge-2025">2025 ✓</span>
+    </div>
+
+    <p><strong>Bias</strong> measures how far off the model's predictions are from the true values (error due to wrong assumptions). <strong>Variance</strong> measures how much the model's predictions vary for different training sets (sensitivity to noise).</p>
+
+    <div class="bv-grid">
+      <div class="bv-card bv-high-bias">
+        <h4>High Bias (Underfitting)</h4>
+        <div class="bv-stats">Train Error: ~15% | Dev Error: ~16%</div>
+        <ul>
+          <li>Model is too simple</li>
+          <li>Cannot capture patterns</li>
+          <li>Fails even on training data</li>
+        </ul>
+        <div style="margin-top:10px;font-size:12px;color:var(--blue)">Fix: Bigger network, more layers, train longer</div>
+      </div>
+      <div class="bv-card bv-high-var">
+        <h4>High Variance (Overfitting)</h4>
+        <div class="bv-stats">Train Error: ~1% | Dev Error: ~15%</div>
+        <ul>
+          <li>Model memorized training data</li>
+          <li>Poor generalization</li>
+          <li>Large train-dev gap</li>
+        </ul>
+        <div style="margin-top:10px;font-size:12px;color:var(--rose)">Fix: More data, regularization, dropout</div>
+      </div>
+      <div class="bv-card bv-both">
+        <h4>High Bias + High Variance</h4>
+        <div class="bv-stats">Train Error: ~15% | Dev Error: ~30%</div>
+        <ul>
+          <li>Worst case scenario</li>
+          <li>Underfits in some regions</li>
+          <li>Overfits in others</li>
+        </ul>
+        <div style="margin-top:10px;font-size:12px;color:var(--amber)">Fix: Larger model + regularization</div>
+      </div>
+      <div class="bv-card bv-good">
+        <h4>Low Bias + Low Variance</h4>
+        <div class="bv-stats">Train Error: ~1% | Dev Error: ~2%</div>
+        <ul>
+          <li>Ideal scenario</li>
+          <li>Generalizes well</li>
+          <li>Small train-dev gap</li>
+        </ul>
+        <div style="margin-top:10px;font-size:12px;color:var(--green)">Goal to achieve!</div>
+      </div>
+    </div>
+
+    <h3>With Mismatched Data Distributions</h3>
+    <p>When training data and dev/test data come from different distributions (e.g., training on internet photos, testing on mobile camera photos), we need a more careful analysis:</p>
+
+    <table>
+      <tr><th>Scenario</th><th>Train Error</th><th>Train-Dev Error</th><th>Dev Error</th><th>Diagnosis</th></tr>
+      <tr><td>Case 1</td><td>1%</td><td>2%</td><td>10%</td><td>Data mismatch problem</td></tr>
+      <tr><td>Case 2</td><td>1%</td><td>10%</td><td>11%</td><td>Variance (overfitting)</td></tr>
+      <tr><td>Case 3</td><td>10%</td><td>11%</td><td>12%</td><td>Bias (underfitting)</td></tr>
+    </table>
+
+    <h3>Regularization Techniques to Fix Variance</h3>
+    <div class="card-grid">
+      <div class="card"><h4>L2 Regularization</h4><p>Adds λ·‖W‖² to the loss. Penalizes large weights, preventing overfitting.</p></div>
+      <div class="card"><h4>Dropout</h4><p>Randomly deactivates neurons during training with probability p. Forces redundant representations.</p></div>
+      <div class="card"><h4>Batch Normalization</h4><p>Normalizes layer inputs. Reduces internal covariate shift, acts as mild regularizer.</p></div>
+      <div class="card"><h4>Data Augmentation</h4><p>Flips, crops, rotations, color jitter artificially expand the training set.</p></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 9. TRANSFER LEARNING -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="transfer">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2><span class="accent-green">Transfer</span> Learning</h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-2023">2023 ✓</span>
+    </div>
+
+    <p>Transfer learning is a technique where a model <strong>pre-trained on a large dataset</strong> (e.g., ImageNet with 1.2M images) is reused for a different but related task. This is especially valuable when the target dataset is small.</p>
+
+    <div class="tl-stages">
+      <div class="tl-stage tl-stage-1">
+        <h4 style="color:var(--blue)">Pre-train</h4>
+        <p>Train deep CNN on large dataset (ImageNet). Model learns general features: edges, textures, shapes.</p>
+      </div>
+      <div class="tl-stage tl-stage-2">
+        <h4 style="color:var(--teal)">Adapt</h4>
+        <p>Remove last FC layer(s). Freeze early layers. Add new FC layers matching target classes.</p>
+      </div>
+      <div class="tl-stage tl-stage-3">
+        <h4 style="color:var(--amber)">Fine-tune</h4>
+        <p>Train on small target dataset. Only new layers (or all layers) update based on data size.</p>
+      </div>
+    </div>
+
+    <h3>When to Freeze vs Fine-tune</h3>
+    <table>
+      <tr><th>Target Data Size</th><th>Strategy</th><th>Approach</th></tr>
+      <tr><td><strong>Very Small</strong> (&lt;1K samples)</td><td>Feature Extraction</td><td>Freeze all layers; train only new output layer</td></tr>
+      <tr><td><strong>Medium</strong> (1K–100K)</td><td>Partial Fine-tuning</td><td>Freeze early layers; fine-tune last few layers</td></tr>
+      <tr><td><strong>Large</strong> (&gt;100K)</td><td>Full Fine-tuning</td><td>Initialize from pre-trained; retrain entire network</td></tr>
+    </table>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Why it works</strong>
+        <p>Early CNN layers learn universal features (edges, curves) that apply to almost any vision task. Only the later layers encode task-specific features that need to be retrained.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 10. MULTI-TASK LEARNING -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="multitask">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2>Multi-task <span class="accent-green">Learning</span></h2>
+    </div>
+
+    <p>Multi-task learning trains a <strong>single neural network to perform multiple tasks simultaneously</strong>, sharing lower-level representations. A classic example is an autonomous driving system that simultaneously detects pedestrians, cars, traffic signs, and traffic lights.</p>
+
+    <h3>When to Use Multi-task Learning</h3>
+    <ul>
+      <li>Tasks share similar low-level features (e.g., all are visual recognition tasks)</li>
+      <li>Amount of data per task is similar</li>
+      <li>A large enough network can handle all tasks</li>
+      <li>Training a shared model is more practical than separate models</li>
+    </ul>
+
+    <h3>Multi-task Loss</h3>
+    <div class="formula">
+      <span class="label">Multi-Task Loss</span>
+      L = (1/m) Σ_i Σ_j L(ŷ_i^(j), y_i^(j))<br><br>
+      <span style="color:var(--teal)">Sum over all training examples (i) and all tasks (j)</span><br>
+      <span style="color:var(--amber)">Missing labels can be ignored during backprop</span>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 11. END-TO-END DEEP LEARNING -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="e2e">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <h2>End-to-End <span class="accent">Deep Learning</span></h2>
+    </div>
+
+    <p>End-to-end deep learning replaces a multi-stage processing pipeline with a <strong>single neural network</strong> that directly learns from raw input (e.g., audio waveform) to final output (e.g., text transcript).</p>
+
+    <div class="card-grid">
+      <div class="card" style="border-color:rgba(74,222,128,0.3)">
+        <h4 style="color:var(--green)">Pros</h4>
+        <ul style="padding-left:16px;">
+          <li>Less hand-engineering and domain knowledge required</li>
+          <li>Learns from data directly</li>
+          <li>Can discover optimal features automatically</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(244,63,94,0.3)">
+        <h4 style="color:var(--rose)">Cons</h4>
+        <ul style="padding-left:16px;">
+          <li>Requires very large labeled datasets</li>
+          <li>Cannot leverage existing domain knowledge</li>
+          <li>Less interpretable</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 12. DL FRAMEWORKS -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="frameworks">
+    <div class="section-header">
+      <span class="section-num">12</span>
+      <h2>Deep Learning <span class="accent">Frameworks</span></h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2025">2025 ✓</span>
+    </div>
+
+    <p>Deep learning frameworks provide automatic differentiation, GPU acceleration, and high-level APIs for building and training neural networks efficiently.</p>
+
+    <div class="fw-grid">
+      <div class="fw-card">
+        <span class="fw-name" style="color:#FF6F00">TensorFlow</span>
+        <div class="fw-sub">Google Brain · Production-Ready</div>
+        <span class="fw-tag" style="background:rgba(255,111,0,0.1);color:#FF6F00;border:1px solid rgba(255,111,0,0.3)">Deployment</span>
+      </div>
+      <div class="fw-card">
+        <span class="fw-name" style="color:#EE4C2C">PyTorch</span>
+        <div class="fw-sub">Meta AI · Research Favorite</div>
+        <span class="fw-tag" style="background:rgba(238,76,44,0.1);color:#EE4C2C;border:1px solid rgba(238,76,44,0.3)">Research</span>
+      </div>
+      <div class="fw-card">
+        <span class="fw-name" style="color:var(--teal)">Keras</span>
+        <div class="fw-sub">High-level TF API · Easy</div>
+        <span class="fw-tag" style="background:rgba(45,212,191,0.1);color:var(--teal);border:1px solid rgba(45,212,191,0.3)">Beginner</span>
+      </div>
+      <div class="fw-card">
+        <span class="fw-name" style="color:var(--violet)">JAX</span>
+        <div class="fw-sub">Google · XLA Compiled</div>
+        <span class="fw-tag" style="background:rgba(167,139,250,0.1);color:var(--violet);border:1px solid rgba(167,139,250,0.3)">Advanced</span>
+      </div>
+    </div>
+
+    <h3>Key Features of a DL Framework</h3>
+    <table>
+      <tr><th>Feature</th><th>Description</th><th>Benefit</th></tr>
+      <tr><td><strong>Automatic Differentiation</strong></td><td>Computes gradients automatically via backpropagation</td><td>No manual gradient derivation needed</td></tr>
+      <tr><td><strong>GPU Acceleration</strong></td><td>CUDA/cuDNN integration for parallel computation</td><td>10-100× speedup over CPU</td></tr>
+      <tr><td><strong>Pre-built Layers</strong></td><td>Conv2D, Dense, LSTM, Dropout built-in</td><td>Rapid prototyping</td></tr>
+      <tr><td><strong>Model Zoo</strong></td><td>Pre-trained models (ResNet, BERT, etc.)</td><td>Transfer learning out-of-box</td></tr>
+      <tr><td><strong>Deployment Tools</strong></td><td>TensorFlow Lite, ONNX for mobile/edge</td><td>Production deployment</td></tr>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 13. LENET-5 -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="lenet">
+    <div class="section-header">
+      <span class="section-num">13</span>
+      <h2><span class="accent-violet">LeNet-5</span></h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2025">2025 ✓</span>
+    </div>
+
+    <p>Proposed by <strong>Yann LeCun et al. in 1998</strong>, LeNet-5 was one of the first successful deep convolutional networks. It was designed for handwritten digit recognition (MNIST) and pioneered the use of learned features in image classification.</p>
+
+    <div class="model-specs">
+      <div class="spec-item"><span class="spec-val">1998</span><span class="spec-label">Year</span></div>
+      <div class="spec-item"><span class="spec-val">7</span><span class="spec-label">Layers</span></div>
+      <div class="spec-item"><span class="spec-val">~60K</span><span class="spec-label">Parameters</span></div>
+      <div class="spec-item"><span class="spec-val">32×32</span><span class="spec-label">Input Size</span></div>
+      <div class="spec-item"><span class="spec-val">10</span><span class="spec-label">Output Classes</span></div>
+    </div>
+
+    <h3>Architecture Details</h3>
+    <div class="lenet-grid">
+      <div class="ln-block">
+        <div class="ln-box box-input">INPUT</div>
+        <div class="ln-label">32×32×1<br>Grayscale</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-conv">C1<br>CONV</div>
+        <div class="ln-label">6 filters<br>5×5, s=1<br>28×28×6</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-pool">S2<br>AVG</div>
+        <div class="ln-label">14×14×6<br>Pool 2×2</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-conv">C3<br>CONV</div>
+        <div class="ln-label">16 filters<br>5×5, s=1<br>10×10×16</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-pool">S4<br>AVG</div>
+        <div class="ln-label">5×5×16<br>Pool 2×2</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-fc">C5<br>FC</div>
+        <div class="ln-label">120 units<br>(Dense)</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-fc">F6<br>FC</div>
+        <div class="ln-label">84 units</div>
+      </div>
+      <div class="ln-arrow">→</div>
+      <div class="ln-block">
+        <div class="ln-box box-soft">OUT</div>
+        <div class="ln-label">10 classes<br>SoftMax</div>
+      </div>
+    </div>
+
+    <h3>Key Characteristics</h3>
+    <ul>
+      <li>Uses <strong>Average Pooling</strong> (not max pooling)</li>
+      <li>Activation: <strong>tanh / sigmoid</strong> (not ReLU — ReLU came later)</li>
+      <li>Spatial dimensions decrease, channels increase — classic CNN design</li>
+      <li>Only ~60K parameters — tiny by modern standards</li>
+      <li>Established the foundational pattern: CONV → POOL → CONV → POOL → FC → FC → Output</li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 14. ALEXNET -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="alexnet">
+    <div class="section-header">
+      <span class="section-num">14</span>
+      <h2><span class="accent-rose">AlexNet</span></h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2024">2024 ✓</span>
+      <span class="badge badge-2025">2025 ✓</span>
+    </div>
+
+    <p>Proposed by <strong>Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton in 2012</strong>, AlexNet won the ImageNet ILSVRC-2012 competition with a top-5 error of 15.3% — dramatically better than the runner-up (26.2%). It reignited interest in deep learning and is considered a watershed moment in AI history.</p>
+
+    <div class="model-specs">
+      <div class="spec-item"><span class="spec-val">2012</span><span class="spec-label">Year</span></div>
+      <div class="spec-item"><span class="spec-val">8</span><span class="spec-label">Layers</span></div>
+      <div class="spec-item"><span class="spec-val">~60M</span><span class="spec-label">Parameters</span></div>
+      <div class="spec-item"><span class="spec-val">227×227</span><span class="spec-label">Input Size</span></div>
+      <div class="spec-item"><span class="spec-val">1000</span><span class="spec-label">Output Classes</span></div>
+      <div class="spec-item"><span class="spec-val">15.3%</span><span class="spec-label">Top-5 Error</span></div>
+    </div>
+
+    <h3>Architecture Details</h3>
+    <table>
+      <tr><th>Layer</th><th>Config</th><th>Output Size</th></tr>
+      <tr><td><strong>Input</strong></td><td>RGB image</td><td>227 × 227 × 3</td></tr>
+      <tr><td><strong>CONV 1</strong></td><td>96 filters, 11×11, stride 4</td><td>55 × 55 × 96</td></tr>
+      <tr><td><strong>MAX POOL 1</strong></td><td>3×3, stride 2 + LRN</td><td>27 × 27 × 96</td></tr>
+      <tr><td><strong>CONV 2</strong></td><td>256 filters, 5×5, same</td><td>27 × 27 × 256</td></tr>
+      <tr><td><strong>MAX POOL 2</strong></td><td>3×3, stride 2 + LRN</td><td>13 × 13 × 256</td></tr>
+      <tr><td><strong>CONV 3</strong></td><td>384 filters, 3×3, same</td><td>13 × 13 × 384</td></tr>
+      <tr><td><strong>CONV 4</strong></td><td>384 filters, 3×3, same</td><td>13 × 13 × 384</td></tr>
+      <tr><td><strong>CONV 5</strong></td><td>256 filters, 3×3, same</td><td>13 × 13 × 256</td></tr>
+      <tr><td><strong>MAX POOL 3</strong></td><td>3×3, stride 2</td><td>6 × 6 × 256</td></tr>
+      <tr><td><strong>FC 6</strong></td><td>4096 units + Dropout(0.5)</td><td>4096</td></tr>
+      <tr><td><strong>FC 7</strong></td><td>4096 units + Dropout(0.5)</td><td>4096</td></tr>
+      <tr><td><strong>FC 8 + Softmax</strong></td><td>1000 classes</td><td>1000</td></tr>
+    </table>
+
+    <h3>Key Innovations in AlexNet</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>ReLU Activation</h4>
+        <p>First large-scale use of ReLU instead of sigmoid/tanh. Trained 6× faster and solved the vanishing gradient issue.</p>
+      </div>
+      <div class="card">
+        <h4>Dropout (0.5)</h4>
+        <p>Applied to FC layers to prevent overfitting. Randomly drops 50% of neurons during training.</p>
+      </div>
+      <div class="card">
+        <h4>Data Augmentation</h4>
+        <p>Random crops, horizontal flips, and color jittering to artificially expand the training set.</p>
+      </div>
+      <div class="card">
+        <h4>Multi-GPU Training</h4>
+        <p>Split across 2 GTX 580 GPUs (only 3GB VRAM each). Used inter-GPU communication at certain layers.</p>
+      </div>
+      <div class="card">
+        <h4>LRN (Local Response Normalization)</h4>
+        <p>Normalizes responses across adjacent feature maps. Enhances generalization (now largely replaced by Batch Norm).</p>
+      </div>
+      <div class="card">
+        <h4>Overlapping Pooling</h4>
+        <p>Uses stride smaller than pool size (stride 2, pool 3×3), providing richer features than non-overlapping pooling.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 15. VGG-16 -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="vgg">
+    <div class="section-header">
+      <span class="section-num">15</span>
+      <h2><span class="accent-amber">VGG-16</span></h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2024">2024 ✓</span>
+    </div>
+
+    <p>Proposed by <strong>Simonyan &amp; Zisserman (Oxford VGG Lab) in 2014</strong>, VGG-16 demonstrated that network depth using very small (3×3) convolution filters is a critical component for achieving strong performance. It finished 2nd in ILSVRC-2014.</p>
+
+    <div class="model-specs">
+      <div class="spec-item"><span class="spec-val">2014</span><span class="spec-label">Year</span></div>
+      <div class="spec-item"><span class="spec-val">16</span><span class="spec-label">Layers (13+3)</span></div>
+      <div class="spec-item"><span class="spec-val">~138M</span><span class="spec-label">Parameters</span></div>
+      <div class="spec-item"><span class="spec-val">224×224</span><span class="spec-label">Input Size</span></div>
+      <div class="spec-item"><span class="spec-val">7.3%</span><span class="spec-label">Top-5 Error</span></div>
+    </div>
+
+    <h3>Architecture — Block Structure</h3>
+
+    <div class="vgg-stacks">
+      <div class="vgg-block">
+        <div class="vgg-layer" style="background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.3);color:var(--blue)">CONV 64</div>
+        <div class="vgg-layer" style="background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.3);color:var(--blue)">CONV 64</div>
+        <div class="vgg-pool">MAXPOOL</div>
+        <div class="vgg-blk-label">Block 1<br/>224→112</div>
+      </div>
+      <div class="vgg-arrow">→</div>
+      <div class="vgg-block">
+        <div class="vgg-layer" style="background:rgba(45,212,191,0.12);border:1px solid rgba(45,212,191,0.3);color:var(--teal)">CONV 128</div>
+        <div class="vgg-layer" style="background:rgba(45,212,191,0.12);border:1px solid rgba(45,212,191,0.3);color:var(--teal)">CONV 128</div>
+        <div class="vgg-pool">MAXPOOL</div>
+        <div class="vgg-blk-label">Block 2<br/>112→56</div>
+      </div>
+      <div class="vgg-arrow">→</div>
+      <div class="vgg-block">
+        <div class="vgg-layer" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--amber)">CONV 256</div>
+        <div class="vgg-layer" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--amber)">CONV 256</div>
+        <div class="vgg-layer" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--amber)">CONV 256</div>
+        <div class="vgg-pool">MAXPOOL</div>
+        <div class="vgg-blk-label">Block 3<br/>56→28</div>
+      </div>
+      <div class="vgg-arrow">→</div>
+      <div class="vgg-block">
+        <div class="vgg-layer" style="background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.3);color:var(--orange)">CONV 512</div>
+        <div class="vgg-layer" style="background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.3);color:var(--orange)">CONV 512</div>
+        <div class="vgg-layer" style="background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.3);color:var(--orange)">CONV 512</div>
+        <div class="vgg-pool">MAXPOOL</div>
+        <div class="vgg-blk-label">Block 4<br/>28→14</div>
+      </div>
+      <div class="vgg-arrow">→</div>
+      <div class="vgg-block">
+        <div class="vgg-layer" style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);color:var(--violet)">CONV 512</div>
+        <div class="vgg-layer" style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);color:var(--violet)">CONV 512</div>
+        <div class="vgg-layer" style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);color:var(--violet)">CONV 512</div>
+        <div class="vgg-pool">MAXPOOL</div>
+        <div class="vgg-blk-label">Block 5<br/>14→7</div>
+      </div>
+      <div class="vgg-arrow">→</div>
+      <div class="vgg-block">
+        <div class="vgg-fc">FC 4096</div>
+        <div class="vgg-fc">FC 4096</div>
+        <div class="vgg-fc">FC 1000</div>
+        <div class="vgg-pool">SOFTMAX</div>
+        <div class="vgg-blk-label">Head<br/>Classifier</div>
+      </div>
+    </div>
+
+    <h3>VGG Design Principles</h3>
+    <ul>
+      <li><strong>All conv filters are 3×3</strong>, stride 1, same padding — uniform throughout</li>
+      <li><strong>Max pooling</strong> is 2×2, stride 2 — halves spatial dimensions</li>
+      <li><strong>Channels double</strong> after each pooling block: 64 → 128 → 256 → 512 → 512</li>
+      <li><strong>ReLU</strong> activation after every conv layer</li>
+      <li>Three fully connected layers at the end: 4096 → 4096 → 1000</li>
+    </ul>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>Why two 3×3 convolutions instead of one 5×5?</strong>
+        <p>Two stacked 3×3 conv layers have the same receptive field as one 5×5 layer, but with fewer parameters (2×3×3=18 vs 5×5=25 per channel) and an extra non-linearity (ReLU). VGG showed this simple insight scales to very deep networks.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 16. RESNET -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="resnet">
+    <div class="section-header">
+      <span class="section-num">16</span>
+      <h2>Residual Networks <span class="accent-green">(ResNet)</span></h2>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-hot">🔥 Hot Topic</span>
+      <span class="badge badge-2023">2023 ✓</span>
+      <span class="badge badge-2024">2024 ✓</span>
+    </div>
+
+    <p>Proposed by <strong>Kaiming He et al. (Microsoft Research) in 2015</strong>, ResNet introduced <strong>skip connections (residual connections)</strong> that allow training of extremely deep networks (50, 101, 152 layers) without degradation. It won ILSVRC-2015 with a top-5 error of only 3.57%.</p>
+
+    <div class="model-specs">
+      <div class="spec-item"><span class="spec-val">2015</span><span class="spec-label">Year</span></div>
+      <div class="spec-item"><span class="spec-val">34–152</span><span class="spec-label">Depths</span></div>
+      <div class="spec-item"><span class="spec-val">~25M</span><span class="spec-label">Params (ResNet-50)</span></div>
+      <div class="spec-item"><span class="spec-val">3.57%</span><span class="spec-label">Top-5 Error</span></div>
+    </div>
+
+    <h3>The Problem: Degradation</h3>
+    <p>As networks get deeper, accuracy degrades — not because of overfitting, but because of the <strong>vanishing gradient problem</strong>. Gradients become too small to update early layers. ResNet solves this with skip connections.</p>
+
+    <h3>The Residual Block</h3>
+    <div class="res-block">
+      <div class="res-flow">
+        <div class="res-box box-input">x (input)</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="res-box box-conv">CONV + BN + ReLU</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="res-box box-conv">CONV + BN</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="res-box box-relu">+ x (skip)</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="res-box box-relu">ReLU</div>
+      </div>
+      <div class="res-skip">F(x) + x = H(x)</div>
+    </div>
+
+    <div class="formula">
+      <span class="label">Residual Learning</span>
+      H(x) = F(x) + x<br><br>
+      Instead of learning H(x) directly, the block learns F(x) = H(x) − x<br>
+      <span style="color:var(--teal)">If optimal mapping is identity: F(x) → 0, trivially achievable</span><br>
+      <span style="color:var(--amber)">Skip connection allows gradient to flow directly → no vanishing gradients!</span>
+    </div>
+
+    <h3>Why Skip Connections Help</h3>
+    <ul>
+      <li><strong>Gradient highway:</strong> Gradients flow directly from output to early layers without shrinking</li>
+      <li><strong>Identity learning:</strong> If a layer is not needed, it can learn to output 0 (making H(x) = x)</li>
+      <li><strong>Ensemble effect:</strong> Acts like training many different depth networks simultaneously</li>
+    </ul>
+
+    <h3>ResNet Variants</h3>
+    <table>
+      <tr><th>Variant</th><th>Layers</th><th>Parameters</th><th>Notes</th></tr>
+      <tr><td><strong>ResNet-18</strong></td><td>18</td><td>~11M</td><td>Lightweight, fast</td></tr>
+      <tr><td><strong>ResNet-34</strong></td><td>34</td><td>~21M</td><td>Original paper variant</td></tr>
+      <tr><td><strong>ResNet-50</strong></td><td>50</td><td>~25M</td><td>Bottleneck blocks; most common</td></tr>
+      <tr><td><strong>ResNet-101</strong></td><td>101</td><td>~44M</td><td>Higher accuracy</td></tr>
+      <tr><td><strong>ResNet-152</strong></td><td>152</td><td>~60M</td><td>Best accuracy; ILSVRC winner</td></tr>
+    </table>
+
+    <h3>Bottleneck Block (ResNet-50+)</h3>
+    <p>For deeper ResNets, a 3-layer bottleneck design reduces computation:</p>
+    <div class="formula">
+      <span class="label">Bottleneck Design</span>
+      1×1 CONV (reduce depth 256→64) → 3×3 CONV → 1×1 CONV (expand 64→256)<br><br>
+      <span style="color:var(--teal)">The 1×1 convolutions act as dimensionality reduction/expansion</span>
+    </div>
+
+    <div class="callout callout-exam">
+      <div class="callout-icon">📝</div>
+      <div class="callout-body">
+        <strong>Exam Key Points for ResNet</strong>
+        <p>Always mention: (1) Skip/residual connections, (2) Solves vanishing gradient problem, (3) H(x) = F(x) + x formula, (4) Batch Normalization is used after each conv, (5) Can train 100+ layer networks effectively.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- QUICK REVISION TABLE -->
+  <!-- ══════════════════════════════════════ -->
+  <section class="section" id="quick-rev">
+    <div class="section-header">
+      <span class="section-num">★</span>
+      <h2>Quick <span class="accent">Revision</span> — Model Comparison</h2>
+    </div>
+
+    <table>
+      <tr>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Layers</th>
+        <th>Params</th>
+        <th>Input</th>
+        <th>Key Innovation</th>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--violet)">LeNet-5</strong></td>
+        <td>1998</td>
+        <td>7</td>
+        <td>~60K</td>
+        <td>32×32×1</td>
+        <td>First successful deep CNN; tanh/sigmoid; avg pooling</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--rose)">AlexNet</strong></td>
+        <td>2012</td>
+        <td>8</td>
+        <td>~60M</td>
+        <td>227×227×3</td>
+        <td>ReLU, Dropout, LRN, multi-GPU, data augmentation</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--amber)">VGG-16</strong></td>
+        <td>2014</td>
+        <td>16</td>
+        <td>~138M</td>
+        <td>224×224×3</td>
+        <td>Only 3×3 filters; deep uniform architecture</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--green)">ResNet-50</strong></td>
+        <td>2015</td>
+        <td>50+</td>
+        <td>~25M</td>
+        <td>224×224×3</td>
+        <td>Skip connections; solves vanishing gradients; H(x)=F(x)+x</td>
+      </tr>
+    </table>
+
+    <div class="quick-ref" style="margin-top:32px;">
+      <h3>⚡ Must-Know Formulas</h3>
+      <div class="kv-list">
+        <div class="kv"><span class="k">Output dimension</span><span class="v">n_out = ⌊(n + 2p − f) / s⌋ + 1</span></div>
+        <div class="kv"><span class="k">Same padding</span><span class="v">p = (f − 1) / 2</span></div>
+        <div class="kv"><span class="k">Conv parameters</span><span class="v">(f × f × n_C_prev + 1) × n_C</span></div>
+        <div class="kv"><span class="k">SoftMax</span><span class="v">σ(z)_i = e^z_i / Σ e^z_j</span></div>
+        <div class="kv"><span class="k">Cross-entropy loss</span><span class="v">L = −Σ y_i · log(ŷ_i)</span></div>
+        <div class="kv"><span class="k">ResNet residual</span><span class="v">H(x) = F(x) + x</span></div>
+        <div class="kv"><span class="k">ReLU activation</span><span class="v">a = max(0, z)</span></div>
+      </div>
+    </div>
+
+  </section>
+
+  <div style="height:60px"></div>
+  <div style="text-align:center;padding:24px 0;border-top:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">
+    Unit V · Convolutional Neural Networks · Exam Preparation Notes
+  </div>
+
+</main>
+</body>
+</html>

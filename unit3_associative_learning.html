@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit III: Associative Learning — Exam Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090f;
+  --bg2: #0f1420;
+  --bg3: #161e30;
+  --border: #222d45;
+  --text: #cdd5e0;
+  --muted: #5a6a84;
+  --blue: #5ba3ff;
+  --blue-dim: #0d2040;
+  --green: #4ade80;
+  --green-dim: #071a10;
+  --amber: #fbbf24;
+  --amber-dim: #1c1000;
+  --red: #f87171;
+  --red-dim: #1a0505;
+  --purple: #a78bfa;
+  --purple-dim: #130d2a;
+  --cyan: #22d3ee;
+  --heading: 'Playfair Display', Georgia, serif;
+  --body: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.7;display:flex;min-height:100vh;}
+p{margin-bottom:10px;}
+strong{color:#e2e8f0;}
+h3{font-family:var(--heading);font-size:20px;color:white;margin:24px 0 12px;}
+
+/* ── Sidebar ── */
+.sidebar{width:250px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);position:fixed;top:0;left:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column;}
+.sidebar-logo{padding:24px 20px 18px;border-bottom:1px solid var(--border);}
+.sidebar-logo .lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;}
+.sidebar-logo h1{font-family:var(--heading);font-size:19px;font-weight:700;color:white;line-height:1.3;}
+.sidebar-logo .sub{font-size:11.5px;color:var(--blue);margin-top:5px;font-family:var(--mono);}
+.nav-group-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:18px 20px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:all .18s;border-left:3px solid transparent;font-size:13.5px;color:var(--muted);font-weight:400;user-select:none;}
+.nav-item:hover{background:var(--bg3);color:var(--text);border-left-color:var(--border);}
+.nav-item.active{background:var(--blue-dim);color:var(--blue);border-left-color:var(--blue);font-weight:500;}
+.nav-item .ico{font-size:17px;width:22px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:#7f1d1d;color:#fca5a5;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:10px;font-family:var(--mono);letter-spacing:.04em;}
+
+/* ── Main ── */
+.main{margin-left:250px;flex:1;}
+.section{display:none;padding:44px 52px 90px;max-width:950px;animation:fadeIn .22s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── Section header ── */
+.sec-hdr{margin-bottom:36px;padding-bottom:22px;border-bottom:1px solid var(--border);}
+.sec-hdr .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:block;}
+.sec-hdr h2{font-family:var(--heading);font-size:38px;font-weight:900;color:white;line-height:1.15;margin-bottom:10px;}
+.sec-hdr p{color:var(--muted);font-size:14.5px;max-width:620px;}
+
+/* ── Card ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:22px;}
+.card-title{font-family:var(--heading);font-size:21px;font-weight:700;color:white;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.card-title .ico{font-size:22px;}
+
+/* ── Formula box ── */
+.formula{background:#080f20;border:1px solid #1d3a70;border-left:4px solid var(--blue);border-radius:8px;padding:16px 20px;margin:14px 0;font-family:var(--mono);font-size:13px;color:#93c5fd;white-space:pre;overflow-x:auto;line-height:1.9;}
+.formula .cm{color:var(--muted);font-style:italic;}
+
+/* ── Alert boxes ── */
+.box{border-radius:8px;padding:14px 18px;margin:14px 0;font-size:13.5px;display:flex;gap:12px;align-items:flex-start;}
+.box .bi{font-size:18px;flex-shrink:0;margin-top:1px;}
+.box .bc{flex:1;}
+.box.tip{background:var(--amber-dim);border:1px solid #713f12;border-left:4px solid var(--amber);}
+.box.tip .bi,.box.tip strong{color:var(--amber);}
+.box.def{background:var(--green-dim);border:1px solid #14532d;border-left:4px solid var(--green);}
+.box.def .bi,.box.def strong{color:var(--green);}
+.box.imp{background:var(--red-dim);border:1px solid #7f1d1d;border-left:4px solid var(--red);}
+.box.imp .bi,.box.imp strong{color:var(--red);}
+.box.note{background:var(--purple-dim);border:1px solid #4c1d95;border-left:4px solid var(--purple);}
+.box.note .bi,.box.note strong{color:var(--purple);}
+
+/* ── Lists ── */
+ul.cl{list-style:none;padding:0;}
+ul.cl li{padding:4px 0 4px 20px;position:relative;color:var(--text);font-size:14px;}
+ul.cl li::before{content:'▸';position:absolute;left:0;color:var(--blue);font-size:11px;top:7px;}
+ol.steps{counter-reset:s;list-style:none;padding:0;}
+ol.steps li{counter-increment:s;display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;}
+ol.steps li:last-child{border-bottom:none;}
+ol.steps li::before{content:counter(s);background:var(--blue-dim);color:var(--blue);font-family:var(--mono);font-size:12px;font-weight:600;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;border:1px solid #2a5a9f;}
+
+/* ── Tables ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin:16px 0;}
+.tbl th{background:var(--bg3);color:var(--blue);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;text-align:left;border:1px solid var(--border);}
+.tbl td{padding:10px 14px;border:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.tbl tr:nth-child(even) td{background:#0b1018;}
+.tbl .ck{color:var(--green);font-weight:700;text-align:center;}
+.tbl .dk{color:var(--border);text-align:center;}
+.pri-h td:first-child{border-left:3px solid var(--red);}
+.pri-m td:first-child{border-left:3px solid var(--amber);}
+
+/* ── Grid ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0;}
+.mc{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.mc h4{font-family:var(--mono);font-size:11.5px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.mc p,.mc li{font-size:13.5px;color:var(--text);line-height:1.6;}
+
+/* ── Badge ── */
+.bdg{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono);font-weight:600;letter-spacing:.04em;}
+.bdg.bl{background:var(--blue-dim);color:var(--blue);}
+.bdg.gn{background:var(--green-dim);color:var(--green);}
+.bdg.am{background:var(--amber-dim);color:var(--amber);}
+.bdg.rd{background:var(--red-dim);color:var(--red);}
+.bdg.pu{background:var(--purple-dim);color:var(--purple);}
+
+/* ── Diagram ── */
+.diagram{background:#050a14;border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;}
+.diagram-ttl{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;}
+
+/* ── Cheat sheet ── */
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.cheat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.cheat-card h4{font-family:var(--heading);font-size:16px;color:white;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.cheat-card ul{list-style:none;padding:0;}
+.cheat-card li{font-size:12.5px;padding:4px 0;color:var(--text);border-bottom:1px solid var(--border);display:flex;gap:8px;}
+.cheat-card li::before{content:'→';color:var(--muted);flex-shrink:0;}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+@media(max-width:800px){
+  .sidebar{width:100%;min-height:auto;position:relative;}
+  .main{margin-left:0;}
+  .section{padding:24px 18px 60px;}
+  .g2,.g3,.cheat-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="lbl">ANN / Unit III</div>
+    <h1>Associative Learning</h1>
+    <div class="sub">// Exam Study Notes</div>
+  </div>
+  <div class="nav-group-lbl">Sections</div>
+  <div class="nav-item active" onclick="show('s0',this)"><span class="ico">🗺️</span> Overview &amp; Exam Guide</div>
+  <div class="nav-item" onclick="show('s1',this)"><span class="ico">🔗</span> Associative Learning <span class="nav-badge">HOT</span></div>
+  <div class="nav-item" onclick="show('s2',this)"><span class="ico">🕸️</span> Hopfield Network <span class="nav-badge">HOT</span></div>
+  <div class="nav-item" onclick="show('s3',this)"><span class="ico">🌡️</span> Simulated Annealing <span class="nav-badge">HOT</span></div>
+  <div class="nav-item" onclick="show('s4',this)"><span class="ico">⚡</span> Boltzmann Machine <span class="nav-badge">HOT</span></div>
+  <div class="nav-item" onclick="show('s5',this)"><span class="ico">🎲</span> Stochastic &amp; State</div>
+  <div class="nav-item" onclick="show('s6',this)"><span class="ico">🧩</span> Pattern Tasks <span class="nav-badge">HOT</span></div>
+  <div class="nav-item" onclick="show('s7',this)"><span class="ico">📋</span> Cheat Sheet</div>
+</nav>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main class="main">
+
+<!-- ═══ S0: OVERVIEW ═══ -->
+<section class="section active" id="s0">
+  <div class="sec-hdr">
+    <span class="tag">Unit III — Associative Learning</span>
+    <h2>Exam Overview &amp; Strategy</h2>
+    <p>7 Hours of syllabus. Every topic below has appeared at least twice in 3 years. Prioritize red-bordered topics.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📊</span> Topic Frequency (2023–2025)</div>
+    <table class="tbl">
+      <thead><tr><th>Topic</th><th>2023</th><th>2024</th><th>2025</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr class="pri-h"><td><strong>Simulated Annealing</strong></td><td class="ck">✓</td><td class="ck">✓</td><td class="ck">✓</td><td><span class="bdg rd">MUST</span></td></tr>
+        <tr class="pri-h"><td><strong>Hopfield Network</strong></td><td class="ck">✓</td><td class="ck">✓</td><td class="dk">—</td><td><span class="bdg rd">MUST</span></td></tr>
+        <tr class="pri-h"><td><strong>Boltzmann Machine</strong></td><td class="ck">✓</td><td class="dk">—</td><td class="ck">✓</td><td><span class="bdg rd">MUST</span></td></tr>
+        <tr class="pri-h"><td><strong>Boltzmann Learning Law</strong></td><td class="ck">✓</td><td class="dk">—</td><td class="ck">✓</td><td><span class="bdg rd">MUST</span></td></tr>
+        <tr class="pri-h"><td><strong>Associative Learning</strong></td><td class="ck">✓</td><td class="dk">—</td><td class="ck">✓</td><td><span class="bdg rd">MUST</span></td></tr>
+        <tr class="pri-m"><td>Pattern Association</td><td class="dk">—</td><td class="ck">✓</td><td class="ck">✓</td><td><span class="bdg am">HIGH</span></td></tr>
+        <tr class="pri-m"><td>Pattern Classification</td><td class="dk">—</td><td class="ck">✓</td><td class="ck">✓</td><td><span class="bdg am">HIGH</span></td></tr>
+        <tr class="pri-m"><td>Pattern Mapping</td><td class="dk">—</td><td class="ck">✓</td><td class="ck">✓</td><td><span class="bdg am">HIGH</span></td></tr>
+        <tr class="pri-m"><td>Stochastic Network</td><td class="ck">✓</td><td class="ck">✓</td><td class="dk">—</td><td><span class="bdg am">HIGH</span></td></tr>
+        <tr><td>Associative Memory</td><td class="dk">—</td><td class="dk">—</td><td class="ck">✓</td><td><span class="bdg bl">MED</span></td></tr>
+        <tr><td>Catastrophic Forgetting</td><td class="dk">—</td><td class="ck">✓</td><td class="dk">—</td><td><span class="bdg bl">MED</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🎯</span> Top 5 Most Probable Questions</div>
+    <ol class="steps">
+      <li><div><strong>Hopfield Network</strong> — Architecture, weight rule, energy function, convergence, capacity, spurious states. Draw the diagram.</div></li>
+      <li><div><strong>Simulated Annealing</strong> — Algorithm steps, Metropolis criterion, cooling schedule, why it avoids local minima.</div></li>
+      <li><div><strong>Boltzmann Machine + Learning</strong> — Architecture, stochastic activation, two-phase learning (clamped vs free), weight update rule.</div></li>
+      <li><div><strong>Associative Learning &amp; Memory</strong> — Auto vs hetero, Hebbian rule, content addressable memory.</div></li>
+      <li><div><strong>Pattern Tasks</strong> — Distinguish pattern association, classification, and mapping with examples.</div></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📚</span> Syllabus Map</div>
+    <div class="g2">
+      <div class="mc">
+        <h4>Core Theory</h4>
+        <ul class="cl">
+          <li>Introduction &amp; Associative Learning</li>
+          <li>Hopfield Network</li>
+          <li>Error Performance in Hopfield</li>
+          <li>Simulated Annealing</li>
+          <li>Boltzmann Machine</li>
+          <li>Boltzmann Learning</li>
+          <li>State Transition &amp; False Minima</li>
+          <li>Stochastic Update</li>
+        </ul>
+      </div>
+      <div class="mc">
+        <h4>Pattern Recognition Tasks</h4>
+        <ul class="cl">
+          <li>Pattern Association</li>
+          <li>Pattern Classification</li>
+          <li>Pattern Mapping</li>
+          <li>Catastrophic Forgetting</li>
+          <li>Associative Memory</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S1: ASSOCIATIVE LEARNING ═══ -->
+<section class="section" id="s1">
+  <div class="sec-hdr">
+    <span class="tag">Topic 1</span>
+    <h2>Associative Learning &amp; Memory</h2>
+    <p>The foundation of all recurrent networks. Learning to store and retrieve patterns.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">💡</span> What is Associative Learning?</div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Definition:</strong> A learning paradigm in which a neural network learns to associate one pattern with another (or with itself). When presented with a partial or noisy input, the network retrieves the complete stored pattern.</div></div>
+    <p><strong>Biological Basis:</strong> Hebb's postulate — "Neurons that fire together, wire together." If neuron A repeatedly causes neuron B to fire, the synapse between A and B is strengthened.</p>
+    <div class="formula"><span class="cm">// Hebbian Learning Rule</span>
+Δw<sub>ij</sub> = η · x<sub>i</sub> · x<sub>j</sub>
+
+where:
+  η   = learning rate
+  x<sub>i</sub>  = activation of presynaptic neuron i
+  x<sub>j</sub>  = activation of postsynaptic neuron j</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🔀</span> Types of Associative Learning</div>
+    <div class="g2">
+      <div class="mc">
+        <h4>Auto-Associative</h4>
+        <p><strong>Pattern → Same Pattern</strong></p>
+        <p>Input and output are the same pattern. Given a noisy/incomplete version of a stored pattern, recall the original.</p>
+        <p><em>Example: Hopfield Network</em></p>
+        <ul class="cl">
+          <li>Input = Output target</li>
+          <li>Used for pattern completion</li>
+          <li>Content-addressable memory</li>
+        </ul>
+      </div>
+      <div class="mc">
+        <h4>Hetero-Associative</h4>
+        <p><strong>Pattern A → Pattern B</strong></p>
+        <p>Input and output are different patterns. Learn a mapping between two sets of patterns.</p>
+        <p><em>Example: Linear Associator</em></p>
+        <ul class="cl">
+          <li>Input ≠ Output</li>
+          <li>Used for pattern transformation</li>
+          <li>Bidirectional Associative Memory</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam Tip:</strong> Auto-associative = Hopfield (recall same pattern). Hetero-associative = Pattern Association task. Always state this distinction clearly.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🧠</span> Associative Memory</div>
+    <p><strong>Content-Addressable Memory (CAM):</strong> Unlike RAM (accessed by address), associative memory is accessed by the content itself. A partial or noisy key retrieves the full stored item.</p>
+    <div class="g2">
+      <div class="mc">
+        <h4>Storage Phase</h4>
+        <ul class="cl">
+          <li>Present each pattern to network</li>
+          <li>Update weights using Hebbian rule</li>
+          <li>Weights encode pattern correlations</li>
+          <li>W = Σ<sub>μ</sub> x<sup>μ</sup>(x<sup>μ</sup>)<sup>T</sup></li>
+        </ul>
+      </div>
+      <div class="mc">
+        <h4>Retrieval Phase</h4>
+        <ul class="cl">
+          <li>Present probe (partial/noisy)</li>
+          <li>Apply update rule iteratively</li>
+          <li>Network evolves to stable state</li>
+          <li>Stable state = stored pattern</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula"><span class="cm">// Hetero-associative weight matrix</span>
+W = Σ<sub>μ=1</sub><sup>P</sup>  b<sup>μ</sup> · (a<sup>μ</sup>)<sup>T</sup>
+
+Retrieval:  y = sign(W · x)
+
+<span class="cm">// For P stored pairs (a<sup>μ</sup>, b<sup>μ</sup>)</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📏</span> Hebb vs Delta Rule Comparison</div>
+    <table class="tbl">
+      <thead><tr><th>Aspect</th><th>Hebb Rule</th><th>Delta Rule</th></tr></thead>
+      <tbody>
+        <tr><td>Update Criterion</td><td>Always update</td><td>Update on error only</td></tr>
+        <tr><td>Error-driven</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Stability</td><td>Weights grow unbounded</td><td>Converges (linear networks)</td></tr>
+        <tr><td>Capacity</td><td>Lower</td><td>Higher</td></tr>
+        <tr><td>Used In</td><td>Hopfield, basic associator</td><td>ADALINE, Perceptron</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ S2: HOPFIELD ═══ -->
+<section class="section" id="s2">
+  <div class="sec-hdr">
+    <span class="tag">Topic 2 — Most Repeated</span>
+    <h2>Hopfield Network</h2>
+    <p>A recurrent auto-associative memory network. Energy-based, guaranteed convergence.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🏗️</span> Architecture</div>
+    <div class="g2">
+      <div>
+        <ul class="cl">
+          <li><strong>N neurons</strong>, fully interconnected (recurrent)</li>
+          <li><strong>Symmetric weights:</strong> w<sub>ij</sub> = w<sub>ji</sub></li>
+          <li><strong>No self-connections:</strong> w<sub>ii</sub> = 0</li>
+          <li>Binary states: s<sub>i</sub> ∈ {−1, +1} (bipolar)</li>
+          <li>Single-layer, no hidden neurons</li>
+          <li>All neurons are both input and output</li>
+        </ul>
+      </div>
+      <div>
+        <div class="diagram">
+          <div class="diagram-ttl">Hopfield Network (N=4)</div>
+          <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <defs>
+              <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#5ba3ff" opacity=".6"/>
+              </marker>
+            </defs>
+            <!-- connections -->
+            <line x1="110" y1="28" x2="188" y2="96" stroke="#5ba3ff" stroke-width="1" opacity=".3"/>
+            <line x1="110" y1="28" x2="110" y2="172" stroke="#5ba3ff" stroke-width="1" opacity=".3"/>
+            <line x1="110" y1="28" x2="32" y2="96" stroke="#5ba3ff" stroke-width="1" opacity=".3"/>
+            <line x1="188" y1="96" x2="110" y2="172" stroke="#5ba3ff" stroke-width="1" opacity=".3"/>
+            <line x1="188" y1="96" x2="32" y2="96" stroke="#5ba3ff" stroke-width="1" opacity=".3"/>
+            <line x1="110" y1="172" x2="32" y2="96" stroke="#5ba3ff" stroke-width="1" opacity=".3"/>
+            <!-- neurons -->
+            <circle cx="110" cy="28" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+            <circle cx="188" cy="96" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+            <circle cx="110" cy="172" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+            <circle cx="32" cy="96" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+            <text x="110" y="32" fill="#93c5fd" font-size="12" font-family="JetBrains Mono" text-anchor="middle">s₁</text>
+            <text x="188" y="100" fill="#93c5fd" font-size="12" font-family="JetBrains Mono" text-anchor="middle">s₂</text>
+            <text x="110" y="176" fill="#93c5fd" font-size="12" font-family="JetBrains Mono" text-anchor="middle">s₃</text>
+            <text x="32" y="100" fill="#93c5fd" font-size="12" font-family="JetBrains Mono" text-anchor="middle">s₄</text>
+            <text x="110" y="197" fill="#5a6a84" font-size="9" font-family="IBM Plex Sans" text-anchor="middle">wᵢⱼ = wⱼᵢ, wᵢᵢ = 0</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">⚖️</span> Weight Learning Rule (Hebbian / Outer Product)</div>
+    <div class="formula"><span class="cm">// Store P patterns: x¹, x², ..., xᴾ  (each xᵢ ∈ {−1, +1})</span>
+
+w<sub>ij</sub> = (1/N) Σ<sub>μ=1</sub><sup>P</sup>  xᵢ<sup>μ</sup> · xⱼ<sup>μ</sup>     for i ≠ j
+
+w<sub>ii</sub> = 0                              (no self-connection)
+
+<span class="cm">// Matrix form:</span>
+W = (1/N) Σ<sub>μ</sub>  x<sup>μ</sup>(x<sup>μ</sup>)<sup>T</sup>  − (P/N)I</div>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam Tip:</strong> The weight matrix is symmetric (W = Wᵀ) and has zero diagonal. These two properties guarantee convergence of the asynchronous update rule.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🔄</span> Update Rule</div>
+    <div class="formula"><span class="cm">// Net input to neuron i:</span>
+net<sub>i</sub> = Σ<sub>j≠i</sub>  w<sub>ij</sub> · s<sub>j</sub>
+
+<span class="cm">// State update (hard-limiter / sign function):</span>
+s<sub>i</sub>(t+1) = +1   if  net<sub>i</sub> > 0
+s<sub>i</sub>(t+1) = −1   if  net<sub>i</sub> ≤ 0
+s<sub>i</sub>(t+1) = s<sub>i</sub>(t)  if  net<sub>i</sub> = 0  (tie-breaking)</div>
+    <div class="g2">
+      <div class="mc">
+        <h4>Asynchronous Update</h4>
+        <p>One randomly chosen neuron updated at a time. <strong>Guaranteed convergence</strong> to a stable state (energy strictly decreases). Used in practice.</p>
+      </div>
+      <div class="mc">
+        <h4>Synchronous Update</h4>
+        <p>All neurons updated simultaneously. <strong>May oscillate</strong> between two states (2-cycle). Faster but not guaranteed to converge.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">⚡</span> Energy Function — The Core Concept</div>
+    <p>The Hopfield network is an energy minimization system. The energy <em>can only decrease or stay the same</em> with each update, so the network always converges.</p>
+    <div class="formula"><span class="cm">// Lyapunov (Energy) Function:</span>
+E = − ½ Σ<sub>i</sub> Σ<sub>j</sub>  w<sub>ij</sub> · s<sub>i</sub> · s<sub>j</sub>
+
+<span class="cm">// With thresholds θᵢ:</span>
+E = − ½ Σ<sub>i</sub> Σ<sub>j</sub>  w<sub>ij</sub> · s<sub>i</sub> · s<sub>j</sub>  +  Σ<sub>i</sub> θᵢ · s<sub>i</sub>
+
+<span class="cm">// Key property:</span>
+ΔE ≤ 0  at every asynchronous update
+∴ Network converges to a local energy minimum</div>
+    <div class="diagram">
+      <div class="diagram-ttl">Energy Landscape — Attractors &amp; False Minima</div>
+      <svg viewBox="0 0 440 160" xmlns="http://www.w3.org/2000/svg" width="100%">
+        <!-- axis -->
+        <line x1="20" y1="140" x2="420" y2="140" stroke="#222d45" stroke-width="1"/>
+        <text x="430" y="144" fill="#5a6a84" font-size="10" font-family="IBM Plex Sans">State</text>
+        <text x="5" y="20" fill="#5a6a84" font-size="10" font-family="IBM Plex Sans">E</text>
+        <line x1="20" y1="10" x2="20" y2="140" stroke="#222d45" stroke-width="1"/>
+        <!-- energy curve -->
+        <path d="M20,40 C40,35 55,90 80,105 C100,118 110,60 140,55 C165,52 175,105 200,115
+                 C225,124 235,70 255,68 C280,66 285,120 320,125 C345,128 360,80 385,75 C400,73 410,90 420,95"
+              fill="none" stroke="#5ba3ff" stroke-width="2" opacity=".7"/>
+        <!-- basins -->
+        <path d="M55,100 C60,115 70,118 80,105" fill="none" stroke="#4ade80" stroke-width="1.5" opacity=".5"/>
+        <path d="M185,112 C195,122 200,115 210,110" fill="none" stroke="#4ade80" stroke-width="1.5" opacity=".5"/>
+        <path d="M300,122 C310,128 315,126 325,124" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity=".5"/>
+        <!-- minima markers -->
+        <circle cx="80" cy="105" r="5" fill="#4ade80" opacity=".9"/>
+        <text x="73" y="125" fill="#4ade80" font-size="9" font-family="IBM Plex Sans">Pattern A</text>
+        <circle cx="202" cy="115" r="5" fill="#4ade80" opacity=".9"/>
+        <text x="190" y="133" fill="#4ade80" font-size="9" font-family="IBM Plex Sans">Pattern B</text>
+        <circle cx="318" cy="125" r="5" fill="#fbbf24" opacity=".9"/>
+        <text x="300" y="143" fill="#fbbf24" font-size="9" font-family="IBM Plex Sans">⚠ Spurious</text>
+        <!-- arrows showing convergence -->
+        <path d="M50,70 L72,100" fill="none" stroke="#5a6a84" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arr2)"/>
+        <path d="M170,80 L195,110" fill="none" stroke="#5a6a84" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arr2)"/>
+        <defs>
+          <marker id="arr2" markerWidth="5" markerHeight="5" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L5,2.5 L0,5 Z" fill="#5a6a84"/>
+          </marker>
+        </defs>
+        <text x="30" y="60" fill="#5a6a84" font-size="9" font-family="IBM Plex Sans">probe</text>
+        <text x="155" y="72" fill="#5a6a84" font-size="9" font-family="IBM Plex Sans">probe</text>
+      </svg>
+    </div>
+    <div class="box imp"><span class="bi">⚠️</span><div class="bc"><strong>Important:</strong> Stored patterns become local energy minima (attractors). Convergence is guaranteed with asynchronous updates because energy is a Lyapunov function.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📉</span> Storage Capacity &amp; Error Performance</div>
+    <div class="formula"><span class="cm">// Maximum reliable storage capacity:</span>
+P<sub>max</sub> ≈ 0.138 N  ≈  0.14N  ≈  N/7
+
+<span class="cm">// Crosstalk (interference) noise term:</span>
+τᵢ<sup>μ</sup> = (1/N) Σ<sub>ν≠μ</sub> Σ<sub>j≠i</sub>  xⱼ<sup>ν</sup> · xⱼ<sup>μ</sup> · xᵢ<sup>ν</sup>
+
+<span class="cm">// Noise variance grows as P/N</span>
+<span class="cm">// Signal-to-Noise ratio ∝ N/P → decreases as P increases</span></div>
+    <div class="g3">
+      <div class="mc"><h4>P &lt; 0.14N</h4><p style="color:var(--green)">✓ Reliable retrieval. Low crosstalk noise.</p></div>
+      <div class="mc"><h4>P ≈ 0.14N</h4><p style="color:var(--amber)">⚠ ~1% error rate. Near capacity limit.</p></div>
+      <div class="mc"><h4>P &gt; 0.14N</h4><p style="color:var(--red)">✗ Catastrophic failure. Cannot retrieve patterns reliably.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">👻</span> Spurious States (False Minima)</div>
+    <p>Besides the P stored patterns, the network develops <strong>extra attractor states</strong> that were not explicitly stored. These are called spurious states or spurious attractors.</p>
+    <div class="formula"><span class="cm">// For bipolar patterns, if x¹ and x² are stored,
+// then their MIXTURE and NEGATIONS are also attractors:</span>
+
+Mixture:   m = sign(x¹ + x² + x³)  (3-mixture spurious state)
+Negation:  If x¹ is stored, -x¹ is also an attractor</div>
+    <ul class="cl">
+      <li>Spurious states have higher energy than stored patterns</li>
+      <li>Arise from pairwise correlations between stored patterns</li>
+      <li>Number grows exponentially with P</li>
+      <li>Represent incorrect "memories" — false recall</li>
+      <li>Solution: Use unlearning (Hopfield et al.), or simulated annealing</li>
+    </ul>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam Tip:</strong> Spurious states = False minima. They exist because energy minimization is the goal, not pattern storage specifically. The −x<sup>μ</sup> (complement) of every stored pattern is always a spurious attractor in bipolar networks.</div></div>
+  </div>
+</section>
+
+<!-- ═══ S3: SIMULATED ANNEALING ═══ -->
+<section class="section" id="s3">
+  <div class="sec-hdr">
+    <span class="tag">Topic 3 — Appeared Every Year</span>
+    <h2>Simulated Annealing</h2>
+    <p>A probabilistic optimization technique inspired by metallurgy that escapes local minima.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🔬</span> Physical Analogy</div>
+    <div class="g2">
+      <div>
+        <p><strong>Physical Annealing:</strong> Metal is heated to high temperature (atoms move freely), then cooled slowly. Slow cooling allows atoms to settle into the <em>lowest energy crystalline structure</em> (global minimum). Fast cooling = defects (local minima).</p>
+        <br>
+        <p><strong>Computational Analogy:</strong> Replace metal with a combinatorial system. Temperature T controls the randomness. High T = explore widely; Low T = refine solution. Gradually reduce T.</p>
+      </div>
+      <div>
+        <div class="diagram">
+          <div class="diagram-ttl">Cooling Schedule</div>
+          <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <line x1="20" y1="110" x2="190" y2="110" stroke="#222d45" stroke-width="1"/>
+            <line x1="20" y1="10" x2="20" y2="110" stroke="#222d45" stroke-width="1"/>
+            <path d="M25,15 C50,18 80,30 110,55 C140,78 165,100 185,108" fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+            <text x="100" y="125" fill="#5a6a84" font-size="9" text-anchor="middle" font-family="IBM Plex Sans">Time (iterations)</text>
+            <text x="8" y="60" fill="#5a6a84" font-size="9" text-anchor="middle" font-family="IBM Plex Sans" transform="rotate(-90,8,60)">T</text>
+            <text x="30" y="12" fill="#fbbf24" font-size="8" font-family="JetBrains Mono">T₀ (high)</text>
+            <text x="145" y="106" fill="#fbbf24" font-size="8" font-family="JetBrains Mono">T→0</text>
+            <text x="60" y="90" fill="#5a6a84" font-size="8" font-family="IBM Plex Sans">Slow cooling = </text>
+            <text x="60" y="102" fill="#5a6a84" font-size="8" font-family="IBM Plex Sans">better solution</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📋</span> Algorithm (Step by Step)</div>
+    <ol class="steps">
+      <li>Initialize the system in a random state <strong>s</strong> and set a high initial temperature <strong>T = T₀</strong></li>
+      <li>Randomly select a neuron/variable <strong>i</strong> and compute the energy change <strong>ΔE</strong> if its state is flipped</li>
+      <li>If <strong>ΔE &lt; 0</strong> (energy decreases): <em>always accept</em> the change (move downhill)</li>
+      <li>If <strong>ΔE ≥ 0</strong> (energy increases): accept with probability <strong>P = exp(−ΔE/T)</strong> (Metropolis criterion)</li>
+      <li>Repeat steps 2–4 many times (enough for equilibrium at this temperature)</li>
+      <li>Reduce temperature: <strong>T ← α × T</strong> (geometric cooling, α ∈ (0.8, 0.99))</li>
+      <li>Repeat steps 2–6 until T ≈ 0 or system is frozen</li>
+    </ol>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Metropolis Criterion:</strong> Accept an uphill move (worsening change) with probability P = exp(−ΔE/T). At high T, almost all moves accepted. At low T, very few uphill moves accepted. This is the key innovation that allows escaping local minima.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🧮</span> Key Formulas</div>
+    <div class="formula"><span class="cm">// Acceptance probability (Metropolis):</span>
+P(accept) = exp(−ΔE / T)    if ΔE > 0
+P(accept) = 1               if ΔE ≤ 0
+
+<span class="cm">// Geometric cooling schedule:</span>
+T(k) = α · T(k−1)          where α ∈ (0.8, 0.99)
+
+<span class="cm">// Logarithmic cooling (theoretically optimal):</span>
+T(k) = T₀ / ln(1 + k)
+
+<span class="cm">// At high T: P ≈ 1 (random walk, explores freely)</span>
+<span class="cm">// At low T:  P ≈ 0 (rare uphill, mostly greedy)</span>
+<span class="cm">// As T → 0:  Reduces to gradient descent / Hopfield</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📊</span> Behavior at Different Temperatures</div>
+    <table class="tbl">
+      <thead><tr><th>Temperature</th><th>Acceptance of worse moves</th><th>Behavior</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Very High T</strong></td><td class="ck">~100%</td><td>Random walk</td><td>Explores entire state space</td></tr>
+        <tr><td><strong>Medium T</strong></td><td>Moderate</td><td>Biased random walk</td><td>Can escape shallow minima</td></tr>
+        <tr><td><strong>Low T</strong></td><td>Rarely</td><td>Mostly greedy descent</td><td>Converges to good local min</td></tr>
+        <tr><td><strong>T → 0</strong></td><td class="dk">Never</td><td>Deterministic descent</td><td>Pure Hopfield behavior</td></tr>
+      </tbody>
+    </table>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam Tip:</strong> If asked "why does SA avoid local minima?" — Answer: because the Metropolis criterion allows uphill moves with probability exp(−ΔE/T) &gt; 0. This means the system can climb out of local energy wells and eventually find the global minimum if cooling is slow enough.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">⚖️</span> Comparison with Hopfield Network</div>
+    <table class="tbl">
+      <thead><tr><th>Aspect</th><th>Hopfield</th><th>Simulated Annealing</th></tr></thead>
+      <tbody>
+        <tr><td>Update Type</td><td>Deterministic</td><td>Probabilistic</td></tr>
+        <tr><td>Local Minima</td><td>Gets stuck</td><td>Can escape</td></tr>
+        <tr><td>Convergence</td><td>Always (to local min)</td><td>To global min (if slow enough)</td></tr>
+        <tr><td>Speed</td><td>Fast</td><td>Slow</td></tr>
+        <tr><td>Temperature</td><td>T = 0 (no temperature)</td><td>T decreases over time</td></tr>
+        <tr><td>SA reduces to Hopfield</td><td colspan="2" style="text-align:center">YES — when T = 0</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ S4: BOLTZMANN MACHINE ═══ -->
+<section class="section" id="s4">
+  <div class="sec-hdr">
+    <span class="tag">Topic 4 — Very Important</span>
+    <h2>Boltzmann Machine &amp; Learning</h2>
+    <p>A stochastic recurrent network that learns probability distributions over data.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🏗️</span> Architecture</div>
+    <p>A Boltzmann Machine is essentially a <strong>stochastic (probabilistic) version of the Hopfield Network</strong> with both visible and hidden units.</p>
+    <div class="g2">
+      <div class="mc">
+        <h4>Visible Units (V)</h4>
+        <ul class="cl">
+          <li>Interface with observed data</li>
+          <li>Clamped during positive phase</li>
+          <li>Free during negative phase</li>
+          <li>Represent data features directly</li>
+        </ul>
+      </div>
+      <div class="mc">
+        <h4>Hidden Units (H)</h4>
+        <ul class="cl">
+          <li>Not directly observed</li>
+          <li>Learn internal representations</li>
+          <li>Capture higher-order statistics</li>
+          <li>Always free to update</li>
+        </ul>
+      </div>
+    </div>
+    <div class="diagram">
+      <div class="diagram-ttl">Boltzmann Machine Architecture</div>
+      <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" width="100%">
+        <!-- hidden layer -->
+        <text x="200" y="22" fill="#5a6a84" font-size="10" text-anchor="middle" font-family="IBM Plex Sans">Hidden Units</text>
+        <circle cx="100" cy="50" r="18" fill="#130d2a" stroke="#a78bfa" stroke-width="1.5"/>
+        <circle cx="160" cy="50" r="18" fill="#130d2a" stroke="#a78bfa" stroke-width="1.5"/>
+        <circle cx="240" cy="50" r="18" fill="#130d2a" stroke="#a78bfa" stroke-width="1.5"/>
+        <circle cx="300" cy="50" r="18" fill="#130d2a" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="100" y="54" fill="#a78bfa" font-size="11" text-anchor="middle" font-family="JetBrains Mono">h₁</text>
+        <text x="160" y="54" fill="#a78bfa" font-size="11" text-anchor="middle" font-family="JetBrains Mono">h₂</text>
+        <text x="240" y="54" fill="#a78bfa" font-size="11" text-anchor="middle" font-family="JetBrains Mono">h₃</text>
+        <text x="300" y="54" fill="#a78bfa" font-size="11" text-anchor="middle" font-family="JetBrains Mono">h₄</text>
+        <!-- V-H connections -->
+        <line x1="100" y1="68" x2="110" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="100" y1="68" x2="185" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="160" y1="68" x2="110" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="160" y1="68" x2="260" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="240" y1="68" x2="185" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="240" y1="68" x2="335" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="300" y1="68" x2="260" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <line x1="300" y1="68" x2="335" y2="120" stroke="#5ba3ff" stroke-width="1" opacity=".4"/>
+        <!-- H-H connections -->
+        <line x1="118" y1="50" x2="142" y2="50" stroke="#a78bfa" stroke-width="1" opacity=".3"/>
+        <line x1="178" y1="50" x2="222" y2="50" stroke="#a78bfa" stroke-width="1" opacity=".3"/>
+        <line x1="258" y1="50" x2="282" y2="50" stroke="#a78bfa" stroke-width="1" opacity=".3"/>
+        <!-- visible layer -->
+        <text x="200" y="112" fill="#5a6a84" font-size="10" text-anchor="middle" font-family="IBM Plex Sans">Visible Units</text>
+        <circle cx="110" cy="138" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+        <circle cx="185" cy="138" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+        <circle cx="260" cy="138" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+        <circle cx="335" cy="138" r="18" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+        <text x="110" y="142" fill="#93c5fd" font-size="11" text-anchor="middle" font-family="JetBrains Mono">v₁</text>
+        <text x="185" y="142" fill="#93c5fd" font-size="11" text-anchor="middle" font-family="JetBrains Mono">v₂</text>
+        <text x="260" y="142" fill="#93c5fd" font-size="11" text-anchor="middle" font-family="JetBrains Mono">v₃</text>
+        <text x="335" y="142" fill="#93c5fd" font-size="11" text-anchor="middle" font-family="JetBrains Mono">v₄</text>
+        <text x="200" y="170" fill="#5a6a84" font-size="9" text-anchor="middle" font-family="IBM Plex Sans">(data interface — clamped during training positive phase)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🎲</span> Stochastic Activation</div>
+    <p>Unlike Hopfield (deterministic), Boltzmann units fire <strong>probabilistically</strong>. Temperature T controls randomness.</p>
+    <div class="formula"><span class="cm">// Probability that unit i is ON (s_i = 1):</span>
+P(s<sub>i</sub> = 1 | all others) = σ(net<sub>i</sub> / T)
+                          = 1 / (1 + exp(−net<sub>i</sub> / T))
+
+<span class="cm">// Net input:</span>
+net<sub>i</sub> = Σ<sub>j≠i</sub>  w<sub>ij</sub> · s<sub>j</sub>  +  θ<sub>i</sub>   (θᵢ = bias)
+
+<span class="cm">// Temperature effects:</span>
+T → 0:  σ → step function  →  Deterministic (Hopfield)
+T → ∞:  P(s=1) → 0.5       →  Random (coin flip)
+T = 1:  Standard sigmoid activation</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">⚡</span> Energy Function &amp; Boltzmann Distribution</div>
+    <div class="formula"><span class="cm">// Energy (same as Hopfield):</span>
+E(s) = − Σ<sub>i&lt;j</sub>  w<sub>ij</sub> · s<sub>i</sub> · s<sub>j</sub>  −  Σ<sub>i</sub> θ<sub>i</sub> · s<sub>i</sub>
+
+<span class="cm">// At thermal equilibrium, follows Boltzmann distribution:</span>
+P(s) = exp(−E(s) / T) / Z
+
+<span class="cm">// Z = partition function (normalizing constant):</span>
+Z = Σ<sub>all s</sub>  exp(−E(s) / T)
+
+<span class="cm">// Lower energy states are exponentially more probable</span></div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Key Insight:</strong> The network naturally settles into a probability distribution over all states. Low-energy states have high probability. By adjusting weights, we can make the network's distribution match the data distribution — this is Boltzmann Learning.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📚</span> Boltzmann Learning Rule</div>
+    <p>The goal: adjust weights so the model's equilibrium distribution matches the data distribution. Derived by minimizing KL divergence.</p>
+    <div class="formula"><span class="cm">// Weight update rule:</span>
+Δw<sub>ij</sub> = η · ( ⟨s<sub>i</sub> · s<sub>j</sub>⟩<sub>+</sub>  −  ⟨s<sub>i</sub> · s<sub>j</sub>⟩<sub>−</sub> )
+
+where:
+  ⟨s<sub>i</sub>·s<sub>j</sub>⟩<sub>+</sub>  = time-averaged correlation in POSITIVE phase (clamped)
+  ⟨s<sub>i</sub>·s<sub>j</sub>⟩<sub>−</sub>  = time-averaged correlation in NEGATIVE phase (free)
+  η          = learning rate
+
+<span class="cm">// Bias update:</span>
+Δθ<sub>i</sub> = η · ( ⟨s<sub>i</sub>⟩<sub>+</sub>  −  ⟨s<sub>i</sub>⟩<sub>−</sub> )</div>
+    <div class="g2">
+      <div class="mc" style="border-color:#14532d;">
+        <h4 style="color:var(--green)">⊕ Positive Phase (Clamped)</h4>
+        <ul class="cl">
+          <li>Visible units <strong>fixed</strong> to training data</li>
+          <li>Hidden units run freely to equilibrium</li>
+          <li>Measure ⟨sᵢsⱼ⟩₊ at thermal equilibrium</li>
+          <li>Represents: "What the data requires"</li>
+          <li>Network is "dreaming with data"</li>
+        </ul>
+      </div>
+      <div class="mc" style="border-color:#7f1d1d;">
+        <h4 style="color:var(--red)">⊖ Negative Phase (Free-running)</h4>
+        <ul class="cl">
+          <li>All units (visible + hidden) run <strong>freely</strong></li>
+          <li>System reaches thermal equilibrium</li>
+          <li>Measure ⟨sᵢsⱼ⟩₋ at thermal equilibrium</li>
+          <li>Represents: "What the model generates"</li>
+          <li>Network is "dreaming without data"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam Tip:</strong> The update rule subtracts the model's spontaneous correlations from the data-driven correlations. If the model already matches data, ⟨sᵢsⱼ⟩₊ = ⟨sᵢsⱼ⟩₋ and Δwᵢⱼ = 0 — learning stops. This is elegantly self-regulating.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🔷</span> Restricted Boltzmann Machine (RBM)</div>
+    <p>A simplified Boltzmann Machine where <strong>only visible–hidden connections</strong> are allowed. No V–V or H–H connections.</p>
+    <div class="g2">
+      <div class="mc">
+        <h4>Advantages</h4>
+        <ul class="cl">
+          <li>Exact computation of gradients</li>
+          <li>Faster training (no H-H correlations)</li>
+          <li>Foundation of Deep Belief Networks</li>
+          <li>Training via Contrastive Divergence</li>
+        </ul>
+      </div>
+      <div class="mc">
+        <h4>vs Full BM</h4>
+        <ul class="cl">
+          <li>Full BM: all-to-all connections</li>
+          <li>RBM: bipartite structure only</li>
+          <li>Full BM: MCMC for learning</li>
+          <li>RBM: Contrastive Divergence (CD-1)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ S5: STOCHASTIC + STATE ═══ -->
+<section class="section" id="s5">
+  <div class="sec-hdr">
+    <span class="tag">Topic 5</span>
+    <h2>Stochastic Networks &amp; State Transitions</h2>
+    <p>Understanding dynamics of neural networks through energy landscapes and state diagrams.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🗺️</span> State Transition Diagram</div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Definition:</strong> A directed graph where each node represents a possible system state (binary vector) and each edge represents a possible transition. Fixed points (no outgoing edges to different states) are attractors.</div></div>
+    <div class="g2">
+      <div>
+        <ul class="cl">
+          <li><strong>States:</strong> All 2<sup>N</sup> possible binary configurations</li>
+          <li><strong>Transitions:</strong> Determined by update rule (deterministic or probabilistic)</li>
+          <li><strong>Fixed Points:</strong> States that map to themselves — attractors</li>
+          <li><strong>Limit Cycles:</strong> States that cycle (possible in sync update)</li>
+          <li><strong>Basin of Attraction:</strong> Set of states that converge to the same attractor</li>
+          <li><strong>False Minima:</strong> Fixed points that are NOT stored patterns</li>
+        </ul>
+      </div>
+      <div>
+        <div class="diagram">
+          <div class="diagram-ttl">State Transition (N=2 example)</div>
+          <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <defs>
+              <marker id="a1" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#5ba3ff" opacity=".7"/>
+              </marker>
+              <marker id="a2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#fbbf24" opacity=".7"/>
+              </marker>
+            </defs>
+            <!-- states -->
+            <circle cx="60" cy="40" r="20" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+            <text x="60" y="44" fill="#93c5fd" font-size="10" text-anchor="middle" font-family="JetBrains Mono">++</text>
+            <circle cx="155" cy="40" r="20" fill="#0d2040" stroke="#5ba3ff" stroke-width="1.5"/>
+            <text x="155" y="44" fill="#93c5fd" font-size="10" text-anchor="middle" font-family="JetBrains Mono">+−</text>
+            <circle cx="60" cy="135" r="20" fill="#071a10" stroke="#4ade80" stroke-width="2"/>
+            <text x="60" y="139" fill="#4ade80" font-size="10" text-anchor="middle" font-family="JetBrains Mono">−+</text>
+            <circle cx="155" cy="135" r="20" fill="#1c1000" stroke="#fbbf24" stroke-width="2"/>
+            <text x="155" y="139" fill="#fbbf24" font-size="10" text-anchor="middle" font-family="JetBrains Mono">−−</text>
+            <!-- transitions -->
+            <path d="M60,60 L60,115" stroke="#5ba3ff" stroke-width="1.5" fill="none" marker-end="url(#a1)" opacity=".7"/>
+            <path d="M140,40 L80,40" stroke="#5ba3ff" stroke-width="1.5" fill="none" marker-end="url(#a1)" opacity=".7"/>
+            <path d="M145,55 L70,120" stroke="#5ba3ff" stroke-width="1.5" fill="none" marker-end="url(#a1)" opacity=".7"/>
+            <path d="M155,115 L155,115" stroke="#fbbf24" stroke-width="1.5" fill="none"/>
+            <!-- self loop -->
+            <path d="M155,115 C180,100 190,160 165,150" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
+            <!-- self loop green -->
+            <path d="M42,125 C15,110 5,160 38,152" stroke="#4ade80" stroke-width="1.5" fill="none" marker-end="url(#a1)"/>
+            <text x="60" y="170" fill="#4ade80" font-size="8.5" text-anchor="middle" font-family="IBM Plex Sans">Pattern (attractor)</text>
+            <text x="155" y="170" fill="#fbbf24" font-size="8.5" text-anchor="middle" font-family="IBM Plex Sans">Spurious attractor</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">👻</span> False Minima Problem</div>
+    <p>False minima (spurious attractors) are unintended stable states. They arise because the energy function has more minima than the number of stored patterns.</p>
+    <table class="tbl">
+      <thead><tr><th>Type</th><th>Description</th><th>Solution</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Complementary</strong></td><td>−x<sup>μ</sup> is always an attractor in bipolar networks</td><td>Use unipolar units (0/1)</td></tr>
+        <tr><td><strong>Mixture states</strong></td><td>Linear combinations ±x<sup>α</sup>±x<sup>β</sup>±... become attractors</td><td>Reduce storage P or use unlearning</td></tr>
+        <tr><td><strong>Spin-glass states</strong></td><td>Random frozen states with no relation to training data</td><td>Keep P &lt; 0.14N</td></tr>
+      </tbody>
+    </table>
+    <div class="box imp"><span class="bi">⚠️</span><div class="bc"><strong>Key Problem:</strong> A network initialized with a probe pattern may converge to a spurious state instead of the intended pattern — this is an incorrect retrieval. The probability of this increases as P approaches capacity.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🎲</span> Stochastic Update</div>
+    <p>In stochastic networks, updates are <strong>probabilistic</strong> rather than deterministic. This introduces randomness that helps escape local minima.</p>
+    <div class="formula"><span class="cm">// Stochastic update rule (Boltzmann):</span>
+P(s<sub>i</sub> = +1) = 1 / (1 + exp(−2·net<sub>i</sub> / T))
+
+<span class="cm">// For bipolar units, or equivalently:</span>
+P(s<sub>i</sub> = 1)  = σ(net<sub>i</sub> / T)    (for binary 0/1 units)
+
+<span class="cm">// As T → 0: Deterministic (Hopfield behavior)</span>
+<span class="cm">// At T > 0:  Probabilistic (Boltzmann behavior)</span></div>
+    <div class="g2">
+      <div class="mc">
+        <h4>T = 0 (Deterministic)</h4>
+        <p>s<sub>i</sub> = sign(net<sub>i</sub>). Always go to lower energy. Gets stuck in local minima. Hopfield behavior.</p>
+      </div>
+      <div class="mc">
+        <h4>T &gt; 0 (Stochastic)</h4>
+        <p>Occasionally accept worse states. Can escape local minima. Used in Boltzmann Machine and Simulated Annealing.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🔗</span> Connections Between Concepts</div>
+    <table class="tbl">
+      <thead><tr><th>Network</th><th>Update</th><th>Temperature</th><th>Learns?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hopfield</strong></td><td>Deterministic</td><td>T = 0</td><td>One-shot (Hebbian)</td></tr>
+        <tr><td><strong>Simulated Annealing</strong></td><td>Probabilistic, T decreasing</td><td>T = T₀ → 0</td><td>Optimization only</td></tr>
+        <tr><td><strong>Boltzmann Machine</strong></td><td>Probabilistic, T fixed</td><td>T = 1 (typical)</td><td>Yes (iterative)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ S6: PATTERN TASKS ═══ -->
+<section class="section" id="s6">
+  <div class="sec-hdr">
+    <span class="tag">Topic 6</span>
+    <h2>Pattern Recognition Tasks</h2>
+    <p>Three fundamental tasks of ANN-based pattern recognition, plus catastrophic forgetting.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🔁</span> Pattern Association</div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Definition:</strong> Given an input pattern from set A, retrieve the associated output pattern from set B. When A = B (same set), it's auto-association. When A ≠ B, it's hetero-association.</div></div>
+    <div class="g2">
+      <div>
+        <h3 style="font-size:16px;margin:0 0 10px">Auto-Associative</h3>
+        <ul class="cl">
+          <li>Input = Output space</li>
+          <li>Recall complete pattern from partial</li>
+          <li><strong>Example:</strong> Hopfield network</li>
+          <li>W = Σ x<sup>μ</sup>(x<sup>μ</sup>)<sup>T</sup></li>
+          <li>Given noisy x̃ → retrieve x</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:16px;margin:0 0 10px">Hetero-Associative</h3>
+        <ul class="cl">
+          <li>Input space A → Output space B</li>
+          <li>Given pattern A, recall pattern B</li>
+          <li><strong>Example:</strong> Linear Associator</li>
+          <li>W = Σ b<sup>μ</sup>(a<sup>μ</sup>)<sup>T</sup></li>
+          <li>Given a → y = f(Wa)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula"><span class="cm">// Hetero-associative weight matrix (P pairs):</span>
+W = Σ<sub>μ=1</sub><sup>P</sup>  b<sup>μ</sup> · (a<sup>μ</sup>)<sup>T</sup>
+
+<span class="cm">// Retrieval: </span>
+y = sign(W · x)    <span class="cm">// for bipolar</span>
+y = f(W · x)       <span class="cm">// for continuous</span>
+
+<span class="cm">// Example: Face-Name association, Word-Image pairs</span></div>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam:</strong> Pattern association stores (input, output) pairs. The key formula is W = Σ b<sup>μ</sup>(a<sup>μ</sup>)<sup>T</sup>. Pattern completion = auto-associative. Cross-modal recall = hetero-associative.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🏷️</span> Pattern Classification</div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Definition:</strong> Map an input pattern x to a discrete class label c ∈ {1, 2, ..., C}. The network learns decision boundaries that partition the input space into regions corresponding to each class.</div></div>
+    <div class="g2">
+      <div>
+        <h3 style="font-size:16px;margin:0 0 10px">Key Characteristics</h3>
+        <ul class="cl">
+          <li><strong>Discrete output</strong> (class labels)</li>
+          <li>Learns discriminant functions</li>
+          <li>Supervised learning (labeled data)</li>
+          <li>Output: one-hot or class index</li>
+          <li>Training: error minimization</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:16px;margin:0 0 10px">Examples</h3>
+        <ul class="cl">
+          <li>Perceptron (linear boundary)</li>
+          <li>ADALINE (adaptive linear)</li>
+          <li>MLP (nonlinear boundary)</li>
+          <li>Handwriting recognition</li>
+          <li>Spam / not spam</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula"><span class="cm">// General form:</span>
+f: R<sup>n</sup>  →  {1, 2, ..., C}
+
+<span class="cm">// Discriminant function for class k:</span>
+g<sub>k</sub>(x) = w<sub>k</sub><sup>T</sup> · x + b<sub>k</sub>
+
+<span class="cm">// Classification decision:</span>
+ĉ = argmax<sub>k</sub>  g<sub>k</sub>(x)
+
+<span class="cm">// Linearly separable: Perceptron guaranteed to find boundary</span>
+<span class="cm">// Non-linearly separable: Need MLP / kernel methods</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🗺️</span> Pattern Mapping</div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Definition:</strong> The most general task. Map an input vector x ∈ R<sup>n</sup> to a continuous output vector y ∈ R<sup>m</sup>. Equivalent to function approximation. Output is real-valued, not discrete.</div></div>
+    <div class="g2">
+      <div>
+        <h3 style="font-size:16px;margin:0 0 10px">Key Characteristics</h3>
+        <ul class="cl">
+          <li><strong>Continuous output</strong> (real values)</li>
+          <li>Function approximation: f: R<sup>n</sup> → R<sup>m</sup></li>
+          <li>Regression-type problem</li>
+          <li>MSE / MAE loss functions</li>
+          <li>Universal approximation theorem applies</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:16px;margin:0 0 10px">Examples</h3>
+        <ul class="cl">
+          <li>Robot arm control (joint angles)</li>
+          <li>Speech synthesis (text → audio)</li>
+          <li>Image-to-image translation</li>
+          <li>Stock price prediction</li>
+          <li>MLP with backpropagation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula"><span class="cm">// General form:</span>
+f: R<sup>n</sup>  →  R<sup>m</sup>   (continuous mapping)
+
+<span class="cm">// Loss function (MSE):</span>
+L = (1/P) Σ<sub>μ</sub>  ||y<sup>μ</sup> − f(x<sup>μ</sup>; W)||²
+
+<span class="cm">// Trained via gradient descent / backpropagation</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">⚡</span> Quick Comparison of 3 Pattern Tasks</div>
+    <table class="tbl">
+      <thead><tr><th>Aspect</th><th>Association</th><th>Classification</th><th>Mapping</th></tr></thead>
+      <tbody>
+        <tr><td>Output Type</td><td>Binary pattern</td><td>Discrete label</td><td>Continuous vector</td></tr>
+        <tr><td>Task</td><td>Recall stored pair</td><td>Assign class</td><td>Approximate function</td></tr>
+        <tr><td>Learning</td><td>One-shot / Hebbian</td><td>Supervised</td><td>Supervised</td></tr>
+        <tr><td>Example Network</td><td>Hopfield, Linear Associator</td><td>Perceptron, MLP</td><td>MLP, RBF</td></tr>
+        <tr><td>Loss Function</td><td>None / pattern error</td><td>Cross-entropy</td><td>MSE / MAE</td></tr>
+        <tr><td>Generalization</td><td>Pattern completion</td><td>New samples → class</td><td>Interpolation</td></tr>
+      </tbody>
+    </table>
+    <div class="box tip"><span class="bi">💡</span><div class="bc"><strong>Exam Tip:</strong> Association = retrieve stored pattern. Classification = assign a label (discrete). Mapping = produce a real-valued output. Classification is a special case of mapping where output is quantized to class labels.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">💀</span> Catastrophic Forgetting</div>
+    <div class="box def"><span class="bi">📖</span><div class="bc"><strong>Definition:</strong> When a neural network trained on task A is subsequently trained on task B, the weights for task A are overwritten and performance on A degrades dramatically — the network "forgets" task A catastrophically.</div></div>
+    <p><strong>Why it happens:</strong> Gradient descent adjusts all weights based on the new task B's error signal, disrupting the weight configuration that encoded task A.</p>
+    <div class="g2">
+      <div class="mc">
+        <h4>Problem Severity Factors</h4>
+        <ul class="cl">
+          <li>High learning rate → worse forgetting</li>
+          <li>Similar tasks → less forgetting</li>
+          <li>Small network → more overlap</li>
+          <li>Sequential (not interleaved) training</li>
+        </ul>
+      </div>
+      <div class="mc">
+        <h4>Solutions</h4>
+        <ul class="cl">
+          <li><strong>Rehearsal:</strong> Mix old data into new training</li>
+          <li><strong>EWC:</strong> Penalize changes to important weights</li>
+          <li><strong>Progressive Networks:</strong> New columns per task</li>
+          <li><strong>Memory Replay:</strong> Replay stored examples</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula"><span class="cm">// Elastic Weight Consolidation (EWC) loss:</span>
+L(θ) = L<sub>B</sub>(θ) + λ/2 · Σ<sub>i</sub>  F<sub>i</sub> · (θ<sub>i</sub> − θ<sub>A,i</sub>)²
+
+where:
+  L<sub>B</sub>(θ)     = loss on new task B
+  θ<sub>A,i</sub>     = optimal parameters after task A
+  F<sub>i</sub>       = Fisher information (importance of weight i for task A)
+  λ          = regularization strength
+
+<span class="cm">// High Fᵢ → that weight is important for A → penalize changes</span></div>
+    <div class="box note"><span class="bi">📝</span><div class="bc"><strong>Note:</strong> Catastrophic forgetting is a fundamental limitation of gradient-based learning. It's opposite to biological memory: humans can learn new things without forgetting old ones (usually). This is an active area of research in continual/lifelong learning.</div></div>
+  </div>
+</section>
+
+<!-- ═══ S7: CHEAT SHEET ═══ -->
+<section class="section" id="s7">
+  <div class="sec-hdr">
+    <span class="tag">Quick Revision</span>
+    <h2>Exam Cheat Sheet</h2>
+    <p>All essential formulas, definitions, and key points in one place.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">🧮</span> All Key Formulas</div>
+    <div class="formula"><span class="cm">══ HOPFIELD NETWORK ══</span>
+Weight:      w<sub>ij</sub> = (1/N) Σ<sub>μ</sub>  xᵢ<sup>μ</sup>xⱼ<sup>μ</sup>     [w<sub>ii</sub>=0, w<sub>ij</sub>=w<sub>ji</sub>]
+Update:      s<sub>i</sub> = sign(Σ<sub>j</sub> w<sub>ij</sub> s<sub>j</sub>)
+Energy:      E = −½ Σ<sub>ij</sub> w<sub>ij</sub> s<sub>i</sub> s<sub>j</sub>
+Capacity:    P<sub>max</sub> ≈ 0.14N
+
+<span class="cm">══ SIMULATED ANNEALING ══</span>
+Accept prob: P = exp(−ΔE/T)          [if ΔE &gt; 0]
+Cooling:     T(k) = α · T(k−1)       [α ∈ (0.8, 0.99)]
+At T=0:      Reduces to Hopfield
+
+<span class="cm">══ BOLTZMANN MACHINE ══</span>
+Activation:  P(s<sub>i</sub>=1) = 1/(1 + exp(−net<sub>i</sub>/T))
+Energy:      E(s) = −Σ<sub>i&lt;j</sub> w<sub>ij</sub> s<sub>i</sub> s<sub>j</sub> − Σ<sub>i</sub> θ<sub>i</sub> s<sub>i</sub>
+Distribution:P(s) = exp(−E(s)/T) / Z
+Learning:    Δw<sub>ij</sub> = η(⟨s<sub>i</sub>s<sub>j</sub>⟩₊ − ⟨s<sub>i</sub>s<sub>j</sub>⟩₋)
+
+<span class="cm">══ PATTERN ASSOCIATION ══</span>
+Het-Assoc:   W = Σ<sub>μ</sub> b<sup>μ</sup>(a<sup>μ</sup>)<sup>T</sup>
+Retrieval:   y = sign(Wx)
+
+<span class="cm">══ CATASTROPHIC FORGETTING ══</span>
+EWC loss:    L(θ) = L<sub>B</sub>(θ) + λ/2 · Σ F<sub>i</sub>(θ<sub>i</sub>−θ<sub>A,i</sub>)²</div>
+  </div>
+
+  <div class="cheat-grid" style="margin-bottom:20px;">
+    <div class="cheat-card">
+      <h4>🕸️ Hopfield Network</h4>
+      <ul>
+        <li>Fully connected, symmetric, w<sub>ii</sub>=0</li>
+        <li>Bipolar neurons {−1, +1}</li>
+        <li>Asynchronous: guaranteed convergence</li>
+        <li>Synchronous: may oscillate</li>
+        <li>Energy decreases monotonically</li>
+        <li>Capacity: ~0.14N patterns</li>
+        <li>Spurious states = false minima</li>
+        <li>Biological: content-addressable memory</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h4>🌡️ Simulated Annealing</h4>
+      <ul>
+        <li>Inspiration: metallurgical annealing</li>
+        <li>Accept worse: P = exp(−ΔE/T)</li>
+        <li>High T → explore; Low T → exploit</li>
+        <li>Geometric cooling: T = αT</li>
+        <li>Avoids local minima (unlike Hopfield)</li>
+        <li>T=0 → reduces to Hopfield</li>
+        <li>Theoretically finds global minimum</li>
+        <li>Metropolis-Hastings criterion</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h4>⚡ Boltzmann Machine</h4>
+      <ul>
+        <li>Visible + Hidden units</li>
+        <li>Stochastic (probabilistic) activation</li>
+        <li>Boltzmann distribution at equilibrium</li>
+        <li>2 phases: clamped (+) and free (−)</li>
+        <li>Δwᵢⱼ = η(⟨sᵢsⱼ⟩₊ − ⟨sᵢsⱼ⟩₋)</li>
+        <li>RBM: only V-H connections</li>
+        <li>Foundation of deep learning (DBN)</li>
+        <li>Slow to train; theoretically sound</li>
+      </ul>
+    </div>
+    <div class="cheat-card">
+      <h4>🧩 Pattern Tasks</h4>
+      <ul>
+        <li>Association: retrieve stored pattern pair</li>
+        <li>Auto: recall own pattern (Hopfield)</li>
+        <li>Hetero: recall paired pattern</li>
+        <li>Classification: discrete label output</li>
+        <li>Mapping: continuous output (regression)</li>
+        <li>Mapping is most general task</li>
+        <li>Catastrophic forgetting = sequential task problem</li>
+        <li>EWC: protect important weights</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="ico">📌</span> One-Line Definitions to Memorize</div>
+    <table class="tbl">
+      <thead><tr><th>Term</th><th>One-line Definition</th></tr></thead>
+      <tbody>
+        <tr><td>Associative Learning</td><td>Learning to retrieve a stored pattern from a partial or noisy input using association.</td></tr>
+        <tr><td>Hopfield Network</td><td>A fully-connected, symmetric recurrent network that stores patterns as energy minima.</td></tr>
+        <tr><td>Energy Function</td><td>E = −½ΣΣwᵢⱼsᵢsⱼ; decreases at each update — guarantees convergence.</td></tr>
+        <tr><td>Spurious States</td><td>Unintended energy minima that trap the network in incorrect (non-stored) patterns.</td></tr>
+        <tr><td>Simulated Annealing</td><td>A probabilistic optimization that accepts worse moves with P=exp(−ΔE/T) to escape local minima.</td></tr>
+        <tr><td>Boltzmann Machine</td><td>A stochastic recurrent network with visible + hidden units that learns data distributions.</td></tr>
+        <tr><td>Boltzmann Learning</td><td>Δwᵢⱼ = η(⟨sᵢsⱼ⟩₊ − ⟨sᵢsⱼ⟩₋): difference between clamped and free-running correlations.</td></tr>
+        <tr><td>Positive Phase</td><td>Visible units clamped to data; measure data-driven correlations ⟨sᵢsⱼ⟩₊.</td></tr>
+        <tr><td>Negative Phase</td><td>All units free; measure model's spontaneous correlations ⟨sᵢsⱼ⟩₋.</td></tr>
+        <tr><td>Pattern Association</td><td>Store and retrieve (A, B) pattern pairs; W = Σ b<sup>μ</sup>(a<sup>μ</sup>)<sup>T</sup>.</td></tr>
+        <tr><td>Pattern Classification</td><td>Map input pattern to discrete class label; learns decision boundary.</td></tr>
+        <tr><td>Pattern Mapping</td><td>Map input to continuous output vector; general function approximation.</td></tr>
+        <tr><td>Catastrophic Forgetting</td><td>Sequential learning of task B destroys weights encoding task A.</td></tr>
+        <tr><td>Content-Addressable Memory</td><td>Memory accessed by content (partial pattern), not by address — like human memory.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="border-color:var(--amber);background:#141000;">
+    <div class="card-title" style="color:var(--amber)"><span class="ico">⭐</span> Last-Minute Exam Tips</div>
+    <ol class="steps">
+      <li><div><strong>Hopfield energy function</strong> = E = −½ΣΣwᵢⱼsᵢsⱼ — write this first in any Hopfield question. Say "this is a Lyapunov function" — this earns marks.</div></li>
+      <li><div><strong>SA algorithm</strong> — always mention the Metropolis criterion P = exp(−ΔE/T). Say it reduces to Hopfield when T=0. Mention cooling schedule.</div></li>
+      <li><div><strong>Boltzmann Learning two phases</strong> — draw the table: Positive phase (data clamped, hidden free) vs Negative phase (all free). The update rule subtracts them.</div></li>
+      <li><div><strong>Pattern tasks comparison</strong> — if asked to compare all three, make a table with: output type, task, network example. This always impresses examiners.</div></li>
+      <li><div><strong>Spurious states</strong> — complement −x<sup>μ</sup> of stored pattern is always a spurious attractor (in bipolar). This is a common Q.</div></li>
+      <li><div><strong>Capacity = 0.14N</strong> — always state this. If P &gt; 0.14N → catastrophic failure. If P &lt; 0.14N → reliable retrieval.</div></li>
+      <li><div><strong>Draw diagrams</strong> — Hopfield network (circle with bidirectional weights), Boltzmann (visible layer bottom, hidden top), Energy landscape (curve with minima). Diagrams = extra marks.</div></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  document.querySelector('.main').scrollTop = 0;
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit VI – Applications of ANN</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120;
+    --bg2: #111827;
+    --card: #151f33;
+    --card2: #1a2640;
+    --border: #1e3058;
+    --gold: #e8a020;
+    --gold-light: #f5c842;
+    --gold-dim: rgba(232,160,32,0.12);
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.1);
+    --rose: #f87171;
+    --rose-dim: rgba(248,113,113,0.1);
+    --violet: #a78bfa;
+    --violet-dim: rgba(167,139,250,0.1);
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --hot: #ff6b6b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15.5px;
+    line-height: 1.85;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #060d1c 0%, #0f1e3a 50%, #08142a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 40px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(232,160,32,0.07) 0%, transparent 70%);
+  }
+  header::after {
+    content: 'ANN';
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(232,160,32,0.04);
+    pointer-events: none;
+    line-height: 1;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
+  .unit-badge {
+    display: inline-block;
+    background: var(--gold-dim);
+    border: 1px solid rgba(232,160,32,0.3);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  h1 span { color: var(--gold); }
+  .header-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── PRIORITY TABLE ── */
+  .priority-section {
+    max-width: 960px;
+    margin: 44px auto 0;
+    padding: 0 40px;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .priority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .p-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .p-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .p-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 28px;
+    line-height: 1;
+  }
+  .p-name { font-size: 13px; color: var(--text); line-height: 1.35; }
+  .hot-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--hot);
+    background: rgba(255,107,107,0.12);
+    border: 1px solid rgba(255,107,107,0.25);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 960px;
+    margin: 52px auto 80px;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* ── TOPIC CARD ── */
+  .topic {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .topic:nth-child(1) { animation-delay: 0.05s; }
+  .topic:nth-child(2) { animation-delay: 0.10s; }
+  .topic:nth-child(3) { animation-delay: 0.15s; }
+  .topic:nth-child(4) { animation-delay: 0.20s; }
+  .topic:nth-child(5) { animation-delay: 0.25s; }
+  .topic:nth-child(6) { animation-delay: 0.30s; }
+  .topic:nth-child(7) { animation-delay: 0.35s; }
+
+  .topic-header {
+    padding: 24px 30px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: linear-gradient(90deg, rgba(232,160,32,0.06) 0%, transparent 100%);
+  }
+  .topic-icon {
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .icon-gold { background: var(--gold-dim); border: 1px solid rgba(232,160,32,0.2); }
+  .icon-teal { background: var(--teal-dim); border: 1px solid rgba(45,212,191,0.2); }
+  .icon-violet { background: var(--violet-dim); border: 1px solid rgba(167,139,250,0.2); }
+  .icon-rose { background: var(--rose-dim); border: 1px solid rgba(248,113,113,0.2); }
+
+  .topic-title-block h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+  .topic-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .freq-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+  .freq-hot { background: var(--hot); box-shadow: 0 0 6px var(--hot); }
+  .freq-med { background: var(--gold); }
+  .freq-low { background: var(--text-dim); }
+
+  .topic-body { padding: 26px 30px; }
+  .topic-body p { color: var(--text-muted); margin-bottom: 16px; }
+
+  /* ── SUBSECTION ── */
+  .subsec { margin-bottom: 26px; }
+  .subsec:last-child { margin-bottom: 0; }
+  .subsec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsec-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(232,160,32,0.25), transparent);
+  }
+
+  /* ── STEP LIST ── */
+  .step-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border-radius: 4px;
+    padding: 1px 7px;
+    min-width: 28px;
+    text-align: center;
+    margin-top: 2px;
+  }
+  .step-text { font-size: 14px; color: var(--text-muted); }
+  .step-text strong { color: var(--text); font-family: 'Lora', serif; }
+
+  /* ── KEY POINT BOX ── */
+  .keybox {
+    background: linear-gradient(135deg, rgba(232,160,32,0.07) 0%, rgba(232,160,32,0.03) 100%);
+    border: 1px solid rgba(232,160,32,0.22);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .keybox.teal {
+    background: linear-gradient(135deg, rgba(45,212,191,0.07) 0%, rgba(45,212,191,0.03) 100%);
+    border-color: rgba(45,212,191,0.22);
+    border-left-color: var(--teal);
+  }
+  .keybox.violet {
+    background: var(--violet-dim);
+    border-color: rgba(167,139,250,0.22);
+    border-left-color: var(--violet);
+  }
+  .keybox.rose {
+    background: var(--rose-dim);
+    border-color: rgba(248,113,113,0.22);
+    border-left-color: var(--rose);
+  }
+  .keybox strong { color: var(--gold); }
+  .keybox.teal strong { color: var(--teal); }
+  .keybox.violet strong { color: var(--violet); }
+  .keybox.rose strong { color: var(--rose); }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 14px 0;
+    overflow-x: auto;
+  }
+  .arch-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    justify-content: center;
+    min-width: 400px;
+  }
+  .arch-layer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .arch-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .arch-box.gold { border-color: rgba(232,160,32,0.4); color: var(--gold); background: var(--gold-dim); }
+  .arch-box.teal { border-color: rgba(45,212,191,0.4); color: var(--teal); background: var(--teal-dim); }
+  .arch-box.violet { border-color: rgba(167,139,250,0.4); color: var(--violet); background: var(--violet-dim); }
+  .arch-box.rose { border-color: rgba(248,113,113,0.4); color: var(--rose); background: var(--rose-dim); }
+  .arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 3px;
+  }
+  .arch-arrow {
+    color: var(--text-dim);
+    font-size: 18px;
+    padding: 0 6px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ── SPEC TABLE ── */
+  .spec-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .spec-table th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(30,48,88,0.5);
+    font-size: 13.5px;
+    color: var(--text-muted);
+    vertical-align: top;
+  }
+  .spec-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    width: 35%;
+    font-weight: 600;
+  }
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── TAG CHIPS ── */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .tag-gold { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(232,160,32,0.2); }
+  .tag-teal { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
+  .tag-violet { background: var(--violet-dim); color: var(--violet); border: 1px solid rgba(167,139,250,0.2); }
+  .tag-rose { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(248,113,113,0.2); }
+
+  /* ── COMPARISON GRID ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .compare-box {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .compare-box h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .compare-box ul { padding-left: 18px; }
+  .compare-box li { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 10px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--teal);
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 20px 0;
+  }
+
+  /* ── EXAM ALERT ── */
+  .exam-alert {
+    background: linear-gradient(135deg, rgba(255,107,107,0.08) 0%, rgba(255,107,107,0.04) 100%);
+    border: 1px solid rgba(255,107,107,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13.5px;
+  }
+  .exam-alert .ea-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--hot);
+    margin-bottom: 6px;
+  }
+  .exam-alert ul { padding-left: 18px; }
+  .exam-alert li { color: var(--text-muted); margin-bottom: 4px; }
+  .exam-alert li strong { color: var(--text); }
+
+  /* ── NEOCOGNITRON LAYERS ── */
+  .neo-arch {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .neo-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+  .neo-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  .neo-s { background: rgba(45,212,191,0.15); color: var(--teal); border: 1px solid rgba(45,212,191,0.25); }
+  .neo-c { background: rgba(167,139,250,0.15); color: var(--violet); border: 1px solid rgba(167,139,250,0.25); }
+  .neo-u { background: rgba(232,160,32,0.15); color: var(--gold); border: 1px solid rgba(232,160,32,0.25); }
+  .neo-bar {
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .neo-s-bar { background: rgba(45,212,191,0.06); border: 1px solid rgba(45,212,191,0.15); }
+  .neo-c-bar { background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.15); }
+  .neo-u-bar { background: rgba(232,160,32,0.06); border: 1px solid rgba(232,160,32,0.15); }
+
+  /* ── NET TALK WINDOW ── */
+  .nettalk-window {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 14px 0;
+    text-align: center;
+  }
+  .nettalk-chars { display: flex; justify-content: center; gap: 5px; margin-bottom: 10px; }
+  .nc {
+    width: 38px; height: 38px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--card2);
+    color: var(--text-dim);
+  }
+  .nc.center { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); font-size: 18px; }
+  .nc.context { background: rgba(45,212,191,0.07); border-color: rgba(45,212,191,0.2); color: var(--teal); }
+  .nettalk-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ── TEXTURE VISUAL ── */
+  .texture-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .tex-box {
+    aspect-ratio: 1;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    display: flex; align-items: flex-end;
+    padding: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    overflow: hidden;
+    position: relative;
+  }
+  .tex-grass { background: repeating-linear-gradient(30deg, #1a3a1a 0px, #2d5a2d 2px, #1a3a1a 4px); }
+  .tex-brick { background: repeating-linear-gradient(0deg, #4a2a1a 0px, #4a2a1a 12px, transparent 12px, transparent 14px), repeating-linear-gradient(90deg, #5a3020 0px, #5a3020 20px, #3a2010 20px, #3a2010 22px); }
+  .tex-wood { background: repeating-linear-gradient(170deg, #3a2510 0px, #5a3a20 3px, #3a2510 6px, #4a3018 9px); }
+  .tex-fabric { background: repeating-linear-gradient(45deg, #1a1a3a 0px, #1a1a3a 3px, #2a2a5a 3px, #2a2a5a 6px), repeating-linear-gradient(-45deg, #1a1a3a 0px, #1a1a3a 3px, transparent 3px, transparent 6px); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 36px 20px;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 680px) {
+    header { padding: 36px 20px 28px; }
+    main { padding: 0 16px; }
+    .priority-section { padding: 0 16px; }
+    .topic-header { padding: 18px 20px; flex-wrap: wrap; }
+    .topic-body { padding: 20px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .texture-grid { grid-template-columns: repeat(2, 1fr); }
+    header::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="unit-badge">Unit VI &nbsp;·&nbsp; 6 Hours</div>
+    <h1>Applications of <span>Artificial Neural Networks</span></h1>
+    <p class="header-sub">Pattern Classification · Neocognitron · NET Talk · CV Recognition · Texture Analysis</p>
+  </div>
+</header>
+
+<!-- ═══════════════════ PRIORITY PANEL ═══════════════════ -->
+<section class="priority-section" style="margin-top:40px;">
+  <div class="section-label">Most Probable Exam Questions</div>
+  <div class="priority-grid">
+    <div class="p-card"><span class="p-num">01</span><span class="p-name">Neocognitron</span><span class="hot-badge">HOT</span></div>
+    <div class="p-card"><span class="p-num">02</span><span class="p-name">Olympic Symbol Recognition</span><span class="hot-badge">HOT</span></div>
+    <div class="p-card"><span class="p-num">03</span><span class="p-name">Texture Classification</span><span class="hot-badge">HOT</span></div>
+    <div class="p-card"><span class="p-num">04</span><span class="p-name">Texture Segmentation</span><span class="hot-badge">HOT</span></div>
+    <div class="p-card"><span class="p-num">05</span><span class="p-name">NET Talk</span></div>
+    <div class="p-card"><span class="p-num">06</span><span class="p-name">Character Recognition</span></div>
+    <div class="p-card"><span class="p-num">07</span><span class="p-name">CV Recognition</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main>
+
+  <!-- ══ TOPIC 1: OLYMPIC SYMBOL RECOGNITION ══ -->
+  <article class="topic" id="olympic">
+    <div class="topic-header">
+      <div class="topic-icon icon-gold">🏅</div>
+      <div class="topic-title-block">
+        <h2>Olympic Symbol Recognition</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-hot"></span>3 YEARS CONSECUTIVE</span>
+          <span>Pattern Classification</span>
+          <span>High Priority</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">What Is It?</div>
+        <p>This is a classic <strong>pattern classification</strong> problem where an ANN is trained to recognize the 5 interlocked rings of the Olympic symbol from a digitized image. The key challenge is recognizing the symbol despite noise, rotation, or partial occlusion.</p>
+        <div class="keybox">
+          <strong>Core Idea:</strong> An ANN is shown pixel representations of the Olympic rings and learns to classify the image as "Olympic symbol" or "not Olympic symbol" through supervised training.
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Step-by-Step Process</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num">01</span><div class="step-text"><strong>Image Input:</strong> The Olympic symbol image is digitized as a 2D binary matrix (0 = white, 1 = black pixels).</div></div>
+          <div class="step"><span class="step-num">02</span><div class="step-text"><strong>Preprocessing:</strong> Noise removal, normalization of size, binarization to clean the image before feeding to ANN.</div></div>
+          <div class="step"><span class="step-num">03</span><div class="step-text"><strong>Feature Extraction:</strong> Extract structural features — 5 rings, interlocking pattern, circular edges, relative positions. These become inputs to the network.</div></div>
+          <div class="step"><span class="step-num">04</span><div class="step-text"><strong>Network Input:</strong> Flattened pixel array OR extracted feature vector → fed into the input layer of the ANN.</div></div>
+          <div class="step"><span class="step-num">05</span><div class="step-text"><strong>Training:</strong> Backpropagation algorithm adjusts weights. Positive examples (Olympic symbol) vs negative examples (other shapes) train the network.</div></div>
+          <div class="step"><span class="step-num">06</span><div class="step-text"><strong>Classification:</strong> Output layer produces a decision — whether the input image matches the Olympic symbol pattern.</div></div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Network Architecture</div>
+        <div class="arch-diagram">
+          <div class="arch-row">
+            <div class="arch-layer">
+              <div class="arch-box gold">Input<br>Layer</div>
+              <div class="arch-label">Pixel Values<br>/ Features</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-layer">
+              <div class="arch-box teal">Hidden<br>Layer 1</div>
+              <div class="arch-label">Edge/Curve<br>Detection</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-layer">
+              <div class="arch-box teal">Hidden<br>Layer 2</div>
+              <div class="arch-label">Shape<br>Patterns</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-layer">
+              <div class="arch-box violet">Output<br>Layer</div>
+              <div class="arch-label">Olympic /<br>Not Olympic</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Key Concepts to Remember</div>
+        <div class="tag-row">
+          <span class="tag tag-gold">MLP (Multi-Layer Perceptron)</span>
+          <span class="tag tag-teal">Backpropagation Training</span>
+          <span class="tag tag-violet">Binary Classification</span>
+          <span class="tag tag-rose">Feature Vector Input</span>
+          <span class="tag tag-gold">Supervised Learning</span>
+        </div>
+        <div class="exam-alert" style="margin-top:14px;">
+          <div class="ea-title">⚑ Exam Focus Points</div>
+          <ul>
+            <li><strong>Draw the ANN architecture</strong> with input (pixel/feature), hidden, and output layers.</li>
+            <li>Mention <strong>preprocessing steps</strong>: noise removal, normalization.</li>
+            <li>State that training uses <strong>backpropagation with labeled examples</strong>.</li>
+            <li>The 5 rings are a multi-component pattern — explain how the ANN handles spatial arrangement.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ TOPIC 2: NEOCOGNITRON ══ -->
+  <article class="topic" id="neocognitron">
+    <div class="topic-header">
+      <div class="topic-icon icon-teal">🧠</div>
+      <div class="topic-title-block">
+        <h2>Neocognitron</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-hot"></span>3 YEARS CONSECUTIVE</span>
+          <span>Handwritten Character Recognition</span>
+          <span>Highest Priority</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">Overview</div>
+        <p>The Neocognitron is a <strong>multilayered, self-organizing ANN</strong> developed by <strong>Kunihiko Fukushima (1980)</strong>. It is inspired by the visual cortex of mammals (Hubel and Wiesel's biological research). It is specifically designed for <strong>handwritten character recognition</strong> and is invariant to position and distortion.</p>
+        <div class="keybox teal">
+          <strong>Key Inventor:</strong> Kunihiko Fukushima (1980) &nbsp;|&nbsp;
+          <strong>Inspired by:</strong> Hubel & Wiesel's visual cortex model &nbsp;|&nbsp;
+          <strong>Task:</strong> Handwritten character recognition
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Two Types of Cells (The Heart of Neocognitron)</div>
+        <div class="compare-grid">
+          <div class="compare-box">
+            <h4 style="color: var(--teal);">S-Cells (Simple Cells)</h4>
+            <ul>
+              <li>Act as <strong>feature extractors</strong></li>
+              <li>Detect specific local features (edges, curves, line orientations)</li>
+              <li>Similar to simple cells in the visual cortex</li>
+              <li>Respond to a specific pattern at a specific position</li>
+              <li>Uses a <strong>selective response mechanism</strong></li>
+            </ul>
+          </div>
+          <div class="compare-box">
+            <h4 style="color: var(--violet);">C-Cells (Complex Cells)</h4>
+            <ul>
+              <li>Perform <strong>averaging / blurring</strong></li>
+              <li>Provide <strong>position tolerance</strong> (spatial invariance)</li>
+              <li>Respond to a feature regardless of its exact position</li>
+              <li>Similar to complex cells in the visual cortex</li>
+              <li>Reduces sensitivity to small translations</li>
+            </ul>
+          </div>
+        </div>
+        <div class="keybox">
+          <strong>The Rule:</strong> S-cells detect features precisely → C-cells make detection position-tolerant. This alternating pattern is what gives Neocognitron its power.
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Layer-by-Layer Architecture</div>
+        <div class="neo-arch">
+          <div class="neo-row">
+            <div class="neo-tag neo-u">U0 (Input)</div>
+            <div class="neo-bar neo-u-bar">Retina / Input layer — Raw pixel values of the handwritten character</div>
+          </div>
+          <div class="neo-row">
+            <div class="neo-tag neo-s">US1</div>
+            <div class="neo-bar neo-s-bar">S-layer 1 — Detects simple local features (edges, corners, short strokes)</div>
+          </div>
+          <div class="neo-row">
+            <div class="neo-tag neo-c">UC1</div>
+            <div class="neo-bar neo-c-bar">C-layer 1 — Adds position tolerance for features detected by US1</div>
+          </div>
+          <div class="neo-row">
+            <div class="neo-tag neo-s">US2</div>
+            <div class="neo-bar neo-s-bar">S-layer 2 — Detects more complex features (curves, intersections)</div>
+          </div>
+          <div class="neo-row">
+            <div class="neo-tag neo-c">UC2</div>
+            <div class="neo-bar neo-c-bar">C-layer 2 — Further position tolerance at a higher abstraction level</div>
+          </div>
+          <div class="neo-row">
+            <div class="neo-tag neo-s">USn</div>
+            <div class="neo-bar neo-s-bar">Higher S-layers — Whole-character or near-complete pattern features</div>
+          </div>
+          <div class="neo-row">
+            <div class="neo-tag neo-u">Output</div>
+            <div class="neo-bar neo-u-bar">Final recognition — Identified character class (A, B, C … 0–9 etc.)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Key Properties</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num" style="background:var(--teal-dim);color:var(--teal);">①</span><div class="step-text"><strong>Position Invariance:</strong> Recognizes a character regardless of where it appears in the image (thanks to C-cells).</div></div>
+          <div class="step"><span class="step-num" style="background:var(--teal-dim);color:var(--teal);">②</span><div class="step-text"><strong>Distortion Tolerance:</strong> Can recognize slightly deformed or slanted handwriting.</div></div>
+          <div class="step"><span class="step-num" style="background:var(--teal-dim);color:var(--teal);">③</span><div class="step-text"><strong>Hierarchical Feature Extraction:</strong> Low-level → high-level features, just like the mammalian visual cortex.</div></div>
+          <div class="step"><span class="step-num" style="background:var(--teal-dim);color:var(--teal);">④</span><div class="step-text"><strong>Self-Organizing / Unsupervised:</strong> Feature detectors in S-cells are trained by competitive (unsupervised) learning.</div></div>
+        </div>
+      </div>
+
+      <div class="exam-alert">
+        <div class="ea-title">⚑ Exam Focus Points</div>
+        <ul>
+          <li><strong>Inventor:</strong> Always mention Kunihiko Fukushima (1980).</li>
+          <li><strong>Two cell types:</strong> S-cells (feature extraction) and C-cells (position tolerance) — explain both clearly.</li>
+          <li><strong>Layer structure:</strong> Draw U0 → US1 → UC1 → US2 → UC2 → ... → Output.</li>
+          <li><strong>Inspiration:</strong> Biological visual cortex (Hubel & Wiesel).</li>
+          <li><strong>Advantages:</strong> Position invariance, distortion tolerance.</li>
+          <li>Mention it is a <strong>precursor to Convolutional Neural Networks (CNNs)</strong>.</li>
+        </ul>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ TOPIC 3: PRINTED CHARACTER RECOGNITION ══ -->
+  <article class="topic" id="char-recognition">
+    <div class="topic-header">
+      <div class="topic-icon icon-violet">🔤</div>
+      <div class="topic-title-block">
+        <h2>Recognition of Printed Characters</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-med"></span>2023 EXAM</span>
+          <span>Optical Character Recognition (OCR)</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">Overview</div>
+        <p>Printed character recognition (or <strong>Optical Character Recognition — OCR</strong>) uses ANN to identify and classify printed text characters from scanned documents or images. Unlike handwritten characters, printed characters have consistent shape but may vary in font, size, and style.</p>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Processing Pipeline</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num">01</span><div class="step-text"><strong>Acquisition:</strong> Scan or photograph the printed document to get a digital image.</div></div>
+          <div class="step"><span class="step-num">02</span><div class="step-text"><strong>Preprocessing:</strong> Binarization (black/white), noise removal, skew correction, contrast enhancement.</div></div>
+          <div class="step"><span class="step-num">03</span><div class="step-text"><strong>Segmentation:</strong> Separate lines → words → individual characters using projection profiles.</div></div>
+          <div class="step"><span class="step-num">04</span><div class="step-text"><strong>Normalization:</strong> Resize all characters to a fixed size (e.g., 16×16 or 32×32 pixels) for uniform input.</div></div>
+          <div class="step"><span class="step-num">05</span><div class="step-text"><strong>Feature Extraction:</strong> Extract features — pixel density, stroke patterns, zoning features, moment invariants.</div></div>
+          <div class="step"><span class="step-num">06</span><div class="step-text"><strong>ANN Classification:</strong> Feed features to trained MLP. Output neuron with highest activation = recognized character.</div></div>
+          <div class="step"><span class="step-num">07</span><div class="step-text"><strong>Post-processing:</strong> Dictionary lookup, language context to correct misclassifications.</div></div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Features Used for Recognition</div>
+        <table class="spec-table">
+          <tr><th>Feature Type</th><th>Description</th></tr>
+          <tr><td>Raw Pixels</td><td>Entire 16×16 pixel grid as 256 input values</td></tr>
+          <tr><td>Zoning Features</td><td>Divide character into zones; count black pixels per zone</td></tr>
+          <tr><td>Projection Profile</td><td>Horizontal/vertical sum of black pixels</td></tr>
+          <tr><td>Moment Features</td><td>Statistical moments capturing shape distribution</td></tr>
+          <tr><td>Structural Features</td><td>Loops, endpoints, junctions, crossings</td></tr>
+        </table>
+      </div>
+
+      <div class="keybox violet">
+        <strong>Printed vs Handwritten:</strong> Printed chars have consistent shapes (easier for ANN) but vary across fonts. Handwritten chars vary per person (harder — hence Neocognitron is needed for those).
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ TOPIC 4: NET TALK ══ -->
+  <article class="topic" id="nettalk">
+    <div class="topic-header">
+      <div class="topic-icon icon-rose">🗣️</div>
+      <div class="topic-title-block">
+        <h2>NET Talk</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-hot"></span>2024 & 2025 EXAMS</span>
+          <span>Text-to-Speech Conversion</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">What Is NET Talk?</div>
+        <p>NET Talk is a landmark ANN system developed by <strong>Sejnowski and Rosenberg (1987)</strong> that converts written English text into spoken English (phonemes/speech). It demonstrates that a neural network can learn the highly irregular spelling-to-pronunciation rules of English.</p>
+        <div class="keybox rose">
+          <strong>Task:</strong> Convert English text (graphemes/letters) → phonemes (pronunciation sounds) → speech<br>
+          <strong>Developers:</strong> Sejnowski and Rosenberg, 1987<br>
+          <strong>Significance:</strong> Proved ANN could learn complex, exception-heavy linguistic rules
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">The 7-Character Sliding Window</div>
+        <p>NET Talk processes text using a <strong>sliding window of 7 characters</strong>. At each step, 3 characters to the left, the <strong>current focus character</strong>, and 3 characters to the right are presented to the network. Context is crucial because the same letter can be pronounced differently depending on surrounding letters (e.g., 'c' in "cat" vs "cent").</p>
+        <div class="nettalk-window">
+          <div class="nettalk-label" style="margin-bottom:12px;">Example: Processing "reading" → focus on 'a'</div>
+          <div class="nettalk-chars">
+            <div class="nc context" title="context -3">r</div>
+            <div class="nc context" title="context -2">e</div>
+            <div class="nc context" title="context -1">a</div>
+            <div class="nc center" title="FOCUS CHARACTER">d</div>
+            <div class="nc context" title="context +1">i</div>
+            <div class="nc context" title="context +2">n</div>
+            <div class="nc context" title="context +3">g</div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">
+            <span style="color:var(--teal);">◄ context (3)</span>
+            <span>&nbsp;&nbsp;</span>
+            <span style="color:var(--gold);">FOCUS</span>
+            <span>&nbsp;&nbsp;</span>
+            <span style="color:var(--teal);">context (3) ►</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Network Architecture</div>
+        <table class="spec-table">
+          <tr><th>Layer</th><th>Details</th></tr>
+          <tr><td>Input Layer</td><td>7 positions × 29 possible characters = <strong>203 input units</strong><br><em>(26 letters + space + period + capitalization marker)</em></td></tr>
+          <tr><td>Hidden Layer</td><td><strong>80 hidden units</strong> — learns intermediate pronunciation rules</td></tr>
+          <tr><td>Output Layer</td><td><strong>26 output units</strong> — encode phonetic features (manner, place, voicing, stress)</td></tr>
+        </table>
+        <div class="formula">Input (203) → Hidden (80) → Output (26 phonemic features)</div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Training & Performance</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num" style="background:var(--rose-dim);color:var(--rose);">①</span><div class="step-text"><strong>Training Data:</strong> 1,024 words with correct phoneme labels from a dictionary.</div></div>
+          <div class="step"><span class="step-num" style="background:var(--rose-dim);color:var(--rose);">②</span><div class="step-text"><strong>Algorithm:</strong> Backpropagation — minimize error between predicted and correct phoneme output.</div></div>
+          <div class="step"><span class="step-num" style="background:var(--rose-dim);color:var(--rose);">③</span><div class="step-text"><strong>Early training:</strong> Network produces babbling sounds — similar to an infant learning to speak.</div></div>
+          <div class="step"><span class="step-num" style="background:var(--rose-dim);color:var(--rose);">④</span><div class="step-text"><strong>Later training:</strong> Word patterns become recognizable, then fully intelligible.</div></div>
+          <div class="step"><span class="step-num" style="background:var(--rose-dim);color:var(--rose);">⑤</span><div class="step-text"><strong>Result:</strong> ~95% correct phoneme generation; successfully handles irregular English rules (e.g., "rough" vs "though").</div></div>
+        </div>
+      </div>
+
+      <div class="exam-alert">
+        <div class="ea-title">⚑ Exam Focus Points</div>
+        <ul>
+          <li><strong>Creators:</strong> Sejnowski and Rosenberg (1987).</li>
+          <li><strong>7-character sliding window</strong> — always explain why context is needed.</li>
+          <li><strong>Architecture:</strong> 203 inputs → 80 hidden → 26 outputs. Memorize these numbers.</li>
+          <li>Mention the <strong>babbling-to-speech</strong> analogy during training — examiners love this.</li>
+          <li>Training: <strong>backpropagation</strong> on text-phoneme pairs.</li>
+          <li>Handles <strong>irregular English spelling rules</strong> — the key challenge.</li>
+        </ul>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ TOPIC 5: CV RECOGNITION ══ -->
+  <article class="topic" id="cv-recognition">
+    <div class="topic-header">
+      <div class="topic-icon icon-gold">🎙️</div>
+      <div class="topic-title-block">
+        <h2>CV (Consonant-Vowel) Recognition</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-med"></span>2023 EXAM</span>
+          <span>Speech Recognition</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">What Is CV Recognition?</div>
+        <p>CV (Consonant-Vowel) recognition involves identifying speech segments that consist of a <strong>consonant followed by a vowel</strong>, such as "ba", "da", "ga", "pa", "ta", "ka". These are the fundamental building blocks of spoken language. ANN is used to classify these CV units from their acoustic features.</p>
+        <div class="keybox">
+          <strong>CV Examples:</strong> ba, da, ga, pa, ta, ka, ma, na, sa, fa ...<br>
+          <strong>Challenge:</strong> Same consonant sounds different depending on the following vowel (co-articulation effect)
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Processing Pipeline</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num">01</span><div class="step-text"><strong>Speech Input:</strong> Digitize speech waveform using a microphone/ADC at a fixed sampling rate.</div></div>
+          <div class="step"><span class="step-num">02</span><div class="step-text"><strong>Pre-emphasis & Windowing:</strong> Apply pre-emphasis filter to boost high frequencies. Divide signal into overlapping frames.</div></div>
+          <div class="step"><span class="step-num">03</span><div class="step-text"><strong>Feature Extraction:</strong> Extract acoustic features — MFCC (Mel-Frequency Cepstral Coefficients), LPC coefficients, spectral energy, formant frequencies.</div></div>
+          <div class="step"><span class="step-num">04</span><div class="step-text"><strong>ANN Input:</strong> Feature vectors from each frame form the input to the network.</div></div>
+          <div class="step"><span class="step-num">05</span><div class="step-text"><strong>Classification:</strong> ANN trained with backpropagation classifies each segment into the correct CV category.</div></div>
+          <div class="step"><span class="step-num">06</span><div class="step-text"><strong>Output:</strong> Recognized CV label (e.g., "ba", "da", "ga") is returned.</div></div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Key Acoustic Features</div>
+        <div class="tag-row">
+          <span class="tag tag-gold">MFCC (Mel-Frequency Cepstral Coefficients)</span>
+          <span class="tag tag-teal">Formant Frequencies (F1, F2)</span>
+          <span class="tag tag-violet">LPC Coefficients</span>
+          <span class="tag tag-rose">Spectral Energy</span>
+          <span class="tag tag-gold">Pitch / Voicing</span>
+        </div>
+      </div>
+
+      <div class="keybox violet">
+        <strong>Why It's Hard:</strong> Co-articulation — the tongue/lips begin moving for the next sound before finishing the current one. The same consonant sounds acoustically different based on the vowel that follows it.
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ TOPIC 6: TEXTURE CLASSIFICATION ══ -->
+  <article class="topic" id="texture-classification">
+    <div class="topic-header">
+      <div class="topic-icon icon-teal">🖼️</div>
+      <div class="topic-title-block">
+        <h2>Texture Classification</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-hot"></span>3 YEARS CONSECUTIVE</span>
+          <span>Image Analysis</span>
+          <span>High Priority</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">What Is Texture?</div>
+        <p>Texture refers to the <strong>spatial arrangement of intensity/color patterns</strong> in a region of an image. It describes surface properties like smoothness, roughness, regularity, and grain. Examples include grass, wood, brick, fabric, sand, and skin.</p>
+        <div class="texture-grid">
+          <div class="tex-box tex-grass"><span>Grass</span></div>
+          <div class="tex-box tex-brick"><span>Brick</span></div>
+          <div class="tex-box tex-wood"><span>Wood</span></div>
+          <div class="tex-box tex-fabric"><span>Fabric</span></div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Texture Classification vs Segmentation</div>
+        <div class="compare-grid">
+          <div class="compare-box">
+            <h4 style="color: var(--teal);">Classification</h4>
+            <ul>
+              <li>Given a texture <strong>patch/region</strong>, identify <strong>what type</strong> of texture it is.</li>
+              <li>Input: One texture region</li>
+              <li>Output: Class label (wood, grass, etc.)</li>
+              <li>Whole-image OR region-level decision</li>
+            </ul>
+          </div>
+          <div class="compare-box">
+            <h4 style="color: var(--violet);">Segmentation</h4>
+            <ul>
+              <li>Given an image with <strong>multiple texture regions</strong>, find the boundaries between them.</li>
+              <li>Input: Full image</li>
+              <li>Output: Segmentation map</li>
+              <li>Pixel-level or region-level decision</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Texture Feature Extraction Methods</div>
+        <table class="spec-table">
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td>Statistical (1st order)</td><td>Mean, variance, skewness, energy — computed from pixel intensity histogram</td></tr>
+          <tr><td>GLCM (Co-occurrence Matrix)</td><td>Captures spatial relationships: contrast, correlation, energy, homogeneity between pixel pairs at a given offset</td></tr>
+          <tr><td>Gabor Filters</td><td>Multi-scale, multi-orientation bandpass filters that mimic visual cortex; capture both frequency and spatial info</td></tr>
+          <tr><td>Tamura Features</td><td>Coarseness, contrast, directionality, line-likeness, regularity, roughness</td></tr>
+          <tr><td>LBP (Local Binary Pattern)</td><td>Compare each pixel to neighbors; encode as binary pattern; efficient and robust</td></tr>
+          <tr><td>Wavelet Transform</td><td>Multi-resolution decomposition capturing texture at different scales</td></tr>
+        </table>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">ANN-Based Classification Process</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num">01</span><div class="step-text"><strong>Extract Features:</strong> Apply Gabor filters / GLCM / LBP to get a feature vector for each texture region.</div></div>
+          <div class="step"><span class="step-num">02</span><div class="step-text"><strong>Train ANN:</strong> Use labeled texture dataset to train a Multi-Layer Perceptron (MLP) via backpropagation.</div></div>
+          <div class="step"><span class="step-num">03</span><div class="step-text"><strong>Classify:</strong> For a new texture region, extract features → feed to trained ANN → get class label.</div></div>
+        </div>
+      </div>
+
+      <div class="exam-alert">
+        <div class="ea-title">⚑ Exam Focus Points</div>
+        <ul>
+          <li>Define texture and give 3–4 real-world examples.</li>
+          <li>Explain at least <strong>2 feature extraction methods</strong> in detail (GLCM and Gabor filters are most important).</li>
+          <li>Draw the ANN pipeline: Image → Feature Extraction → ANN → Class Label.</li>
+          <li>Clearly distinguish between <strong>classification</strong> (labeling) and <strong>segmentation</strong> (boundary detection).</li>
+        </ul>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ TOPIC 7: TEXTURE SEGMENTATION ══ -->
+  <article class="topic" id="texture-segmentation">
+    <div class="topic-header">
+      <div class="topic-icon icon-violet">🗺️</div>
+      <div class="topic-title-block">
+        <h2>Texture Segmentation</h2>
+        <div class="topic-meta">
+          <span><span class="freq-dot freq-hot"></span>3 YEARS CONSECUTIVE</span>
+          <span>Image Analysis</span>
+          <span>High Priority</span>
+        </div>
+      </div>
+    </div>
+    <div class="topic-body">
+
+      <div class="subsec">
+        <div class="subsec-title">What Is Texture Segmentation?</div>
+        <p>Texture segmentation is the process of <strong>partitioning an image into multiple non-overlapping regions</strong> where each region has a homogeneous texture. The boundaries between different textures are identified. For example, segmenting an aerial image into forest, farmland, and urban regions based on their texture.</p>
+        <div class="keybox violet">
+          <strong>Goal:</strong> Find all boundaries between different texture regions in an image, and label each region with its texture class.
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Segmentation Process Using ANN</div>
+        <div class="step-list">
+          <div class="step"><span class="step-num">01</span><div class="step-text"><strong>Window-Based Analysis:</strong> Divide the image into small overlapping windows (e.g., 16×16, 32×32 pixels).</div></div>
+          <div class="step"><span class="step-num">02</span><div class="step-text"><strong>Feature Extraction:</strong> For each window, extract texture features (GLCM, Gabor, LBP, etc.) to get a feature vector.</div></div>
+          <div class="step"><span class="step-num">03</span><div class="step-text"><strong>ANN Classification:</strong> Each window's feature vector is classified into a texture category by the trained ANN.</div></div>
+          <div class="step"><span class="step-num">04</span><div class="step-text"><strong>Label Map:</strong> Create a pixel-level or region-level label map by assigning texture labels to each window location.</div></div>
+          <div class="step"><span class="step-num">05</span><div class="step-text"><strong>Boundary Detection:</strong> Identify transitions between adjacent regions with different texture labels.</div></div>
+          <div class="step"><span class="step-num">06</span><div class="step-text"><strong>Post-Processing:</strong> Smooth the label map (median filter, morphological operations) to remove isolated mislabeled pixels.</div></div>
+        </div>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Types of Texture Segmentation</div>
+        <table class="spec-table">
+          <tr><th>Type</th><th>Description</th></tr>
+          <tr><td>Region-based</td><td>Group pixels/patches with similar texture features into connected regions</td></tr>
+          <tr><td>Boundary-based</td><td>Detect edges/transitions between distinct texture regions directly</td></tr>
+          <tr><td>Multi-scale</td><td>Analyze texture at multiple resolutions to capture both fine and coarse texture information</td></tr>
+          <tr><td>Unsupervised</td><td>Cluster feature vectors without pre-labeled data (K-means on texture features)</td></tr>
+          <tr><td>Supervised (ANN)</td><td>Train on labeled regions; classify each window using trained ANN</td></tr>
+        </table>
+      </div>
+
+      <div class="subsec">
+        <div class="subsec-title">Applications</div>
+        <div class="tag-row">
+          <span class="tag tag-teal">Medical Image Analysis (MRI/CT)</span>
+          <span class="tag tag-gold">Remote Sensing (Satellite Images)</span>
+          <span class="tag tag-violet">Industrial Defect Detection</span>
+          <span class="tag tag-rose">Document Analysis</span>
+          <span class="tag tag-gold">Aerial Image Interpretation</span>
+        </div>
+      </div>
+
+      <div class="keybox">
+        <strong>Key Difference from Classification:</strong> In classification, you are given a single texture region and asked "what is this?". In segmentation, you are given a whole image and asked "where are the boundaries between different texture regions?"
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ QUICK REVISION TABLE ══ -->
+  <section>
+    <div class="section-label" style="margin-bottom:16px;">Quick Revision Summary</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+      <table class="spec-table" style="margin:0;">
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Key Person / Year</th>
+            <th>Input</th>
+            <th>Output</th>
+            <th>Network</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Olympic Symbol Recognition</td>
+            <td>—</td>
+            <td>Image pixels / features</td>
+            <td>Symbol / Not symbol</td>
+            <td>MLP + Backprop</td>
+          </tr>
+          <tr>
+            <td>Neocognitron</td>
+            <td>Fukushima (1980)</td>
+            <td>Handwritten image</td>
+            <td>Character class</td>
+            <td>S-cell / C-cell hierarchy</td>
+          </tr>
+          <tr>
+            <td>Printed Char Recognition</td>
+            <td>—</td>
+            <td>Scanned doc image</td>
+            <td>ASCII character</td>
+            <td>MLP (OCR)</td>
+          </tr>
+          <tr>
+            <td>NET Talk</td>
+            <td>Sejnowski & Rosenberg (1987)</td>
+            <td>7-char text window (203)</td>
+            <td>26 phonemic features</td>
+            <td>203→80→26 MLP</td>
+          </tr>
+          <tr>
+            <td>CV Recognition</td>
+            <td>—</td>
+            <td>Speech waveform / MFCC</td>
+            <td>CV unit (ba, da, ga…)</td>
+            <td>MLP + Backprop</td>
+          </tr>
+          <tr>
+            <td>Texture Classification</td>
+            <td>—</td>
+            <td>Texture region features</td>
+            <td>Texture class label</td>
+            <td>MLP + GLCM/Gabor</td>
+          </tr>
+          <tr>
+            <td>Texture Segmentation</td>
+            <td>—</td>
+            <td>Full image (windows)</td>
+            <td>Segmented region map</td>
+            <td>Window ANN + labeling</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Unit VI &nbsp;·&nbsp; Applications of ANN &nbsp;·&nbsp; Study Notes &nbsp;·&nbsp; All topics covered
+</footer>
+
+</body>
+</html>

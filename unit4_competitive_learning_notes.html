@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit IV – Competitive Learning Networks</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #141720;
+    --surface2: #1c2030;
+    --border: #252a3a;
+    --accent: #4f9cf9;
+    --accent2: #f9854f;
+    --accent3: #4ff9a8;
+    --accent4: #c84ff9;
+    --text: #dde3f0;
+    --text-muted: #7a85a3;
+    --heading: #ffffff;
+    --tag-bg: #1e2a42;
+    --hot: #ff6b6b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── TOP BANNER ── */
+  .banner {
+    background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0d1421 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(79,156,249,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(79,249,168,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .banner-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .banner h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    color: var(--heading);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .banner h1 span { color: var(--accent); }
+  .banner-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .hot-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 20px;
+  }
+  .hot-tag {
+    background: rgba(255,107,107,0.12);
+    border: 1px solid rgba(255,107,107,0.35);
+    color: var(--hot);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .hot-tag.blue {
+    background: rgba(79,156,249,0.1);
+    border-color: rgba(79,156,249,0.3);
+    color: var(--accent);
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 180px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 24px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-section {
+    padding: 16px 24px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .nav-item {
+    display: block;
+    padding: 7px 24px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-family: 'Source Serif 4', serif;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+  .nav-item:hover {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+  .nav-item.hot {
+    color: var(--hot);
+    font-weight: 600;
+  }
+  .nav-item.hot:hover { border-left-color: var(--hot); }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    padding: 48px 56px;
+    max-width: 900px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 72px;
+    padding-top: 8px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .exam-badge {
+    margin-left: auto;
+    background: rgba(255,107,107,0.12);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--hot);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--accent);
+    margin: 28px 0 10px;
+    font-weight: 700;
+  }
+  h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 20px 0 8px;
+  }
+
+  p { margin-bottom: 14px; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--surface2);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+  .callout.green { border-color: var(--accent3); }
+  .callout.orange { border-color: var(--accent2); }
+  .callout.purple { border-color: var(--accent4); }
+  .callout.red { border-color: var(--hot); }
+  .callout-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--accent);
+  }
+  .callout.green .callout-label { color: var(--accent3); }
+  .callout.orange .callout-label { color: var(--accent2); }
+  .callout.purple .callout-label { color: var(--accent4); }
+  .callout.red .callout-label { color: var(--hot); }
+
+  /* ── FORMULA BLOCKS ── */
+  .formula {
+    background: #0a0d14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 16px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--accent3);
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .formula .label {
+    color: var(--text-muted);
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 16px 0;
+  }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    background: var(--accent);
+    color: #000;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .steps.green li::before { background: var(--accent3); }
+  .steps.orange li::before { background: var(--accent2); }
+  .steps.purple li::before { background: var(--accent4); }
+
+  /* ── GRID ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .card-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .card p, .card ul { font-size: 14px; }
+  .card ul { padding-left: 18px; }
+  .card ul li { margin-bottom: 5px; }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: left;
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ── DIAGRAM ── */
+  .diagram-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* ── HIGHLIGHT ── */
+  strong { color: var(--heading); font-weight: 600; }
+  em { color: var(--accent2); font-style: italic; }
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    background: rgba(79,156,249,0.1);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* ── KEY POINT LIST ── */
+  .key-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+  }
+  .key-list li {
+    padding: 7px 0 7px 22px;
+    position: relative;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .key-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { padding: 24px 20px; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* ── SCROLL BAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BANNER -->
+<div class="banner">
+  <div class="banner-label">Neural Networks · Unit IV · CO3</div>
+  <h1>Competitive <span>Learning</span> Networks</h1>
+  <div class="banner-sub">Self-organizing systems, feature maps, ART architectures, and vector quantization — complete exam notes.</div>
+  <div class="hot-tags">
+    <span class="hot-tag">🔥 3-Year Repeat: CL Network</span>
+    <span class="hot-tag">🔥 3-Year Repeat: SOM</span>
+    <span class="hot-tag">🔥 3-Year Repeat: Vector Quantization</span>
+    <span class="hot-tag blue">⭐ High Priority: ART</span>
+    <span class="hot-tag blue">⭐ High Priority: LVQ</span>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR NAV -->
+<nav class="sidebar">
+  <div class="sidebar-title">Contents</div>
+  <div class="nav-section">Core Topics</div>
+  <a class="nav-item hot" href="#cl">① Competitive Learning</a>
+  <a class="nav-item hot" href="#som">② SOM Architecture</a>
+  <a class="nav-item hot" href="#som-algo">③ SOM Algorithm</a>
+  <a class="nav-item" href="#art">④ ART Network</a>
+  <a class="nav-item" href="#char-art">⑤ Character Recognition (ART)</a>
+  <a class="nav-item hot" href="#vq">⑥ Vector Quantization</a>
+  <a class="nav-item" href="#lvq">⑦ LVQ</a>
+  <a class="nav-item hot" href="#feature">⑧ Feature Mapping</a>
+  <div class="nav-section" style="margin-top:8px">Quick Ref</div>
+  <a class="nav-item" href="#summary">Exam Summary</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — COMPETITIVE LEARNING
+  ══════════════════════════════════════════ -->
+  <div class="section" id="cl">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Competitive Learning Network</h2>
+      <span class="exam-badge">🔥 ALL 3 YEARS</span>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Definition</div>
+      A <strong>Competitive Learning Network</strong> is an unsupervised neural network where output neurons <em>compete</em> with each other to be activated. Only <strong>one</strong> neuron wins (Winner-Takes-All), and its weights are updated to become more like the input.
+    </div>
+
+    <h3>Core Idea</h3>
+    <p>Neurons specialize over time. Each neuron learns to recognize a specific class of input patterns without any labeled data. This is the basis of all self-organization.</p>
+
+    <h3>Components of CL Network</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Input Layer</div>
+        <ul>
+          <li>Receives the input pattern vector <strong>X</strong></li>
+          <li>No learning happens here</li>
+          <li>Fully connected to output layer</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Output / Competitive Layer</div>
+        <ul>
+          <li>Neurons compete for activation</li>
+          <li>Only the winner fires (output = 1)</li>
+          <li>All others suppressed (output = 0)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Weight Vectors</div>
+        <ul>
+          <li>Each output neuron has a weight vector <strong>W</strong></li>
+          <li>Represent a "prototype" of a cluster</li>
+          <li>Updated only for the winner</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Lateral Inhibition</div>
+        <ul>
+          <li>Winning neuron inhibits all others</li>
+          <li>Enforces the winner-takes-all rule</li>
+          <li>Implemented via negative connections</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Winner-Takes-All (WTA) Rule</h3>
+    <p>The winning neuron <em>j*</em> is the one whose weight vector is <strong>closest</strong> to the input:</p>
+    <div class="formula">
+      <span class="label">Finding the Winner (Euclidean Distance)</span>
+      j* = argmin<sub>j</sub> ‖ X − W<sub>j</sub> ‖
+    </div>
+    <div class="formula">
+      <span class="label">OR equivalently (Dot Product / Net Input)</span>
+      j* = argmax<sub>j</sub> ( X · W<sub>j</sub> )   [when vectors are normalized]
+    </div>
+
+    <h3>Weight Update Rule</h3>
+    <div class="formula">
+      <span class="label">Only the winner's weights are updated</span>
+      ΔW<sub>j*</sub> = α · (X − W<sub>j*</sub>)
+      <br>
+      W<sub>j*</sub>(new) = W<sub>j*</sub>(old) + α · (X − W<sub>j*</sub>)
+    </div>
+    <p><strong>α</strong> = learning rate (0 &lt; α ≤ 1). This moves the winner's weight vector closer to the input pattern — <em>the neuron "claims" that input.</em></p>
+
+    <h3>Training Algorithm</h3>
+    <ol class="steps">
+      <li>Initialize weight vectors randomly (or normalize to unit length)</li>
+      <li>Present input pattern <strong>X</strong></li>
+      <li>Compute distances (or dot products) from X to every weight vector</li>
+      <li>Select winning neuron j* (minimum distance)</li>
+      <li>Update only j*'s weights: W<sub>j*</sub> += α(X − W<sub>j*</sub>)</li>
+      <li>Reduce learning rate α slightly</li>
+      <li>Repeat steps 2–6 until convergence</li>
+    </ol>
+
+    <h3>Properties</h3>
+    <ul class="key-list">
+      <li>Unsupervised — no labels needed</li>
+      <li>Performs automatic <strong>clustering</strong> of input data</li>
+      <li>Each output neuron becomes a cluster centroid</li>
+      <li>Related to k-means clustering algorithmically</li>
+      <li>Can suffer from "dead neurons" (neurons that never win)</li>
+    </ul>
+
+    <div class="callout orange">
+      <div class="callout-label">Exam Tip</div>
+      Always mention: <strong>(1)</strong> Winner-Takes-All mechanism, <strong>(2)</strong> Distance formula for finding winner, <strong>(3)</strong> Weight update only for winner. These are the three core exam points.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — SOM ARCHITECTURE
+  ══════════════════════════════════════════ -->
+  <div class="section" id="som">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>SOM Architecture</h2>
+      <span class="exam-badge">🔥 ALL 3 YEARS</span>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">What is SOM?</div>
+      A <strong>Self-Organizing Map (SOM)</strong>, developed by <em>Teuvo Kohonen (1982)</em>, is a competitive network that maps high-dimensional input data onto a <strong>low-dimensional (usually 2D) grid</strong> while preserving the topological structure of the data.
+    </div>
+
+    <h3>Two Basic Feature Mapping Models</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" style="color: var(--accent3)">1. Willshaw-von der Malsburg Model</div>
+        <p style="font-size:14px">Biologically inspired model. Neighboring neurons have excitatory connections; far neurons have inhibitory connections. Creates a <strong>Mexican Hat</strong> function of interaction.</p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color: var(--accent2)">2. Kohonen's SOM Model</div>
+        <p style="font-size:14px">Simplified computational model. Uses a <strong>neighborhood function</strong> instead of explicit lateral connections. More practical and widely used.</p>
+      </div>
+    </div>
+
+    <h3>Architecture of Kohonen SOM</h3>
+    <div class="diagram-box">
+      <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px; width:100%;">
+        <!-- Input layer -->
+        <text x="20" y="30" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10" letter-spacing="2">INPUT LAYER</text>
+        <circle cx="60" cy="100" r="18" fill="#1c2030" stroke="#4f9cf9" stroke-width="1.5"/>
+        <text x="60" y="105" fill="#4f9cf9" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">x₁</text>
+        <circle cx="120" cy="100" r="18" fill="#1c2030" stroke="#4f9cf9" stroke-width="1.5"/>
+        <text x="120" y="105" fill="#4f9cf9" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">x₂</text>
+        <circle cx="180" cy="100" r="18" fill="#1c2030" stroke="#4f9cf9" stroke-width="1.5"/>
+        <text x="180" y="105" fill="#4f9cf9" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">xₙ</text>
+        <text x="150" y="100" fill="#7a85a3" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">...</text>
+        <!-- Connections -->
+        <line x1="78" y1="95" x2="340" y2="65" stroke="#252a3a" stroke-width="1"/>
+        <line x1="78" y1="100" x2="340" y2="100" stroke="#252a3a" stroke-width="1"/>
+        <line x1="78" y1="105" x2="340" y2="135" stroke="#252a3a" stroke-width="1"/>
+        <line x1="138" y1="95" x2="400" y2="65" stroke="#252a3a" stroke-width="1"/>
+        <line x1="138" y1="100" x2="400" y2="100" stroke="#252a3a" stroke-width="1"/>
+        <line x1="138" y1="105" x2="400" y2="135" stroke="#252a3a" stroke-width="1"/>
+        <!-- Output grid -->
+        <text x="310" y="30" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10" letter-spacing="2">2D OUTPUT MAP (5×5 shown)</text>
+        <g fill="#1c2030" stroke="#4ff9a8" stroke-width="1.2">
+          <rect x="340" y="48" width="22" height="22" rx="3"/><rect x="368" y="48" width="22" height="22" rx="3"/>
+          <rect x="396" y="48" width="22" height="22" rx="3"/><rect x="424" y="48" width="22" height="22" rx="3"/>
+          <rect x="452" y="48" width="22" height="22" rx="3"/>
+          <rect x="340" y="76" width="22" height="22" rx="3"/><rect x="368" y="76" width="22" height="22" rx="3"/>
+          <rect x="396" y="76" width="22" height="22" rx="3" fill="#2d4a2a" stroke="#4ff9a8" stroke-width="2.5"/>
+          <rect x="424" y="76" width="22" height="22" rx="3"/><rect x="452" y="76" width="22" height="22" rx="3"/>
+          <rect x="340" y="104" width="22" height="22" rx="3"/><rect x="368" y="104" width="22" height="22" rx="3"/>
+          <rect x="396" y="104" width="22" height="22" rx="3"/><rect x="424" y="104" width="22" height="22" rx="3"/>
+          <rect x="452" y="104" width="22" height="22" rx="3"/>
+          <rect x="340" y="132" width="22" height="22" rx="3"/><rect x="368" y="132" width="22" height="22" rx="3"/>
+          <rect x="396" y="132" width="22" height="22" rx="3"/><rect x="424" y="132" width="22" height="22" rx="3"/>
+          <rect x="452" y="132" width="22" height="22" rx="3"/>
+        </g>
+        <text x="407" y="92" fill="#4ff9a8" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">BMU</text>
+        <!-- Weight label -->
+        <text x="240" y="75" fill="#f9854f" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">Wᵢⱼ</text>
+        <!-- Arrow -->
+        <text x="490" y="105" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10">← Winner</text>
+      </svg>
+    </div>
+
+    <h3>Key Structural Features</h3>
+    <ul class="key-list">
+      <li><strong>Input Layer:</strong> N neurons, one per input dimension (no processing)</li>
+      <li><strong>Competitive Layer:</strong> 1D or 2D grid of output neurons (typically 2D)</li>
+      <li><strong>Full Connectivity:</strong> Every input neuron connects to every output neuron</li>
+      <li><strong>Weight Matrix:</strong> Each output neuron j has weight vector W<sub>j</sub> of same dimension as input</li>
+      <li><strong>No Output Layer:</strong> The competitive layer IS the output</li>
+      <li><strong>Best Matching Unit (BMU):</strong> The winning output neuron for a given input</li>
+    </ul>
+
+    <h3>Neighborhood Function</h3>
+    <p>Unlike basic competitive learning, SOM updates not just the winner but all neurons within a <strong>topological neighborhood</strong> of the winner:</p>
+    <div class="formula">
+      <span class="label">Gaussian Neighborhood Function</span>
+      h(j, j*, t) = exp( −‖r<sub>j</sub> − r<sub>j*</sub>‖² / 2σ(t)² )
+    </div>
+    <p>Where <strong>r<sub>j</sub></strong> = position of neuron j on the map, <strong>r<sub>j*</sub></strong> = position of BMU, <strong>σ(t)</strong> = neighborhood radius (decreases over time).</p>
+
+    <div class="callout purple">
+      <div class="callout-label">Key Insight — Topology Preservation</div>
+      Neurons that are <strong>close on the map</strong> will respond to <strong>similar inputs</strong>. This preserves the topological structure of the input space in the 2D output map — the fundamental difference from basic competitive learning.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3 — SOM ALGORITHM
+  ══════════════════════════════════════════ -->
+  <div class="section" id="som-algo">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>SOM Algorithm</h2>
+      <span class="exam-badge">🔥 2023, 2025</span>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">The 3 Phases</div>
+      SOM training has three processes happening simultaneously: <strong>Competition</strong> (find BMU) → <strong>Cooperation</strong> (determine neighborhood) → <strong>Adaptation</strong> (update weights).
+    </div>
+
+    <h3>Step-by-Step Algorithm</h3>
+    <ol class="steps green">
+      <li><strong>Initialize:</strong> Set weights W<sub>j</sub> randomly (small values or random samples from training data). Set initial learning rate α(0) and neighborhood radius σ(0).</li>
+      <li><strong>Select Input:</strong> Choose a training sample X from the dataset (randomly or sequentially).</li>
+      <li><strong>Competition — Find BMU:</strong> Compute Euclidean distance between X and every neuron's weight vector. The neuron j* with minimum distance is the Best Matching Unit (BMU).
+        <div class="formula" style="margin: 8px 0 0 0; font-size:13px">j* = argmin<sub>j</sub> ‖ X − W<sub>j</sub> ‖²</div>
+      </li>
+      <li><strong>Cooperation — Determine Neighborhood:</strong> Calculate the neighborhood function h(j, j*, t) for all neurons. Neurons close to BMU on the map get higher h values.
+        <div class="formula" style="margin: 8px 0 0 0; font-size:13px">h(j, j*, t) = exp(−d²<sub>j,j*</sub> / 2σ²(t))</div>
+      </li>
+      <li><strong>Adaptation — Update All Weights:</strong> Update weights of BMU and its neighbors proportionally to h.
+        <div class="formula" style="margin: 8px 0 0 0; font-size:13px">W<sub>j</sub>(t+1) = W<sub>j</sub>(t) + α(t) · h(j,j*,t) · [X − W<sub>j</sub>(t)]</div>
+      </li>
+      <li><strong>Decay Parameters:</strong> Reduce learning rate and neighborhood radius:
+        <div class="formula" style="margin: 8px 0 0 0; font-size:13px">α(t) = α(0) · exp(−t/τ₁)  &nbsp;&nbsp;&nbsp;  σ(t) = σ(0) · exp(−t/τ₂)</div>
+      </li>
+      <li><strong>Repeat:</strong> Go to Step 2 until maximum iterations reached or convergence.</li>
+    </ol>
+
+    <h3>Two Phases of Training</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" style="color: var(--accent2)">Phase 1: Ordering Phase</div>
+        <p style="font-size:14px">Large neighborhood, higher learning rate. The map <em>unfolds</em> to cover the input space. Global topology is established. Runs for ~1000 iterations.</p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color: var(--accent3)">Phase 2: Convergence Phase</div>
+        <p style="font-size:14px">Small neighborhood (1–2 neurons), very small learning rate. Fine-tuning of weights. Map becomes statistically accurate. Runs for ~10× more iterations.</p>
+      </div>
+    </div>
+
+    <h3>Properties of Feature Map (SOM Output)</h3>
+    <ul class="key-list">
+      <li><strong>Topographic Ordering:</strong> Similar inputs activate nearby neurons on the map</li>
+      <li><strong>Density Matching:</strong> More neurons are allocated to regions with more input data density</li>
+      <li><strong>Feature Selection:</strong> Map automatically discovers statistical regularities</li>
+      <li><strong>Dimensionality Reduction:</strong> High-dimensional data → 2D map (like PCA but nonlinear)</li>
+      <li><strong>Magnification Factor:</strong> Areas with more data samples get more map neurons</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 4 — ART NETWORK
+  ══════════════════════════════════════════ -->
+  <div class="section" id="art">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>ART Network</h2>
+      <span class="exam-badge">⭐ 2023, 2024</span>
+    </div>
+
+    <div class="callout red">
+      <div class="callout-label">Core Problem Solved</div>
+      ART solves the <strong>Stability-Plasticity Dilemma</strong>: How can a network learn new patterns (<em>plasticity</em>) without forgetting old ones (<em>stability</em>)? Basic neural nets forget old patterns when trained on new ones — ART avoids this.
+    </div>
+
+    <p><strong>ART = Adaptive Resonance Theory</strong>, developed by <em>Grossberg (1987)</em>. It is a self-organizing network that creates new categories dynamically as needed, without retraining from scratch.</p>
+
+    <h3>Features of ART Models</h3>
+    <ul class="key-list">
+      <li><strong>Online learning:</strong> Can learn new patterns one at a time</li>
+      <li><strong>Stable memory:</strong> Previously learned patterns are not erased</li>
+      <li><strong>Dynamic categorization:</strong> Creates new categories when no existing one fits</li>
+      <li><strong>Vigilance parameter (ρ):</strong> Controls how strict matching must be to assign a pattern to an existing category</li>
+      <li><strong>Two-layer architecture:</strong> Comparison layer (F1) and recognition layer (F2)</li>
+      <li><strong>Bottom-up &amp; top-down weights:</strong> Both directions of information flow</li>
+    </ul>
+
+    <h3>ART Architecture</h3>
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="max-width:480px; width:100%;">
+        <!-- F2 layer -->
+        <text x="250" y="25" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10" text-anchor="middle" letter-spacing="2">F2 — RECOGNITION LAYER</text>
+        <rect x="100" y="35" width="300" height="50" rx="8" fill="#1c2030" stroke="#4ff9a8" stroke-width="1.5"/>
+        <text x="250" y="65" fill="#4ff9a8" font-family="IBM Plex Mono" font-size="11" text-anchor="middle">Output Neurons (Categories)</text>
+        <!-- top-down / bottom-up arrows -->
+        <line x1="250" y1="85" x2="250" y2="140" stroke="#f9854f" stroke-width="1.5"/>
+        <polygon points="246,138 254,138 250,148" fill="#f9854f"/>
+        <text x="262" y="120" fill="#f9854f" font-family="IBM Plex Mono" font-size="10">Top-Down (T)</text>
+        <line x1="220" y1="148" x2="220" y2="88" stroke="#4f9cf9" stroke-width="1.5"/>
+        <polygon points="216,90 224,90 220,80" fill="#4f9cf9"/>
+        <text x="50" y="120" fill="#4f9cf9" font-family="IBM Plex Mono" font-size="10">Bottom-Up (B)</text>
+        <!-- F1 layer -->
+        <text x="250" y="162" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10" text-anchor="middle" letter-spacing="2">F1 — COMPARISON LAYER</text>
+        <rect x="100" y="170" width="300" height="50" rx="8" fill="#1c2030" stroke="#4f9cf9" stroke-width="1.5"/>
+        <text x="250" y="200" fill="#4f9cf9" font-family="IBM Plex Mono" font-size="11" text-anchor="middle">Input + Template Comparison</text>
+        <!-- Input arrow -->
+        <line x1="250" y1="220" x2="250" y2="255" stroke="#7a85a3" stroke-width="1.5"/>
+        <polygon points="246,253 254,253 250,263" fill="#7a85a3"/>
+        <text x="250" y="275" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">Input Pattern X</text>
+        <!-- Vigilance -->
+        <rect x="370" y="100" width="115" height="35" rx="5" fill="#2a1e30" stroke="#c84ff9" stroke-width="1"/>
+        <text x="427" y="120" fill="#c84ff9" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">Vigilance ρ</text>
+        <!-- Reset arrow -->
+        <line x1="370" y1="110" x2="320" y2="85" stroke="#c84ff9" stroke-width="1" stroke-dasharray="4,2"/>
+        <text x="290" y="107" fill="#c84ff9" font-family="IBM Plex Mono" font-size="9">Reset</text>
+      </svg>
+    </div>
+
+    <h3>Types of ART</h3>
+    <table>
+      <thead><tr><th>Type</th><th>Input Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>ART 1</code></td><td>Binary (0/1)</td><td>Simplest; handles binary patterns only. Uses subset matching.</td></tr>
+        <tr><td><code>ART 2</code></td><td>Continuous (analog)</td><td>Handles real-valued inputs. More complex normalization steps.</td></tr>
+        <tr><td><code>ARTMAP</code></td><td>Binary / Continuous</td><td>Supervised version; maps input patterns to target classes.</td></tr>
+        <tr><td><code>Fuzzy ART</code></td><td>Continuous [0,1]</td><td>Uses fuzzy logic operators for matching.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>ART 1 Algorithm (Binary)</h3>
+    <ol class="steps purple">
+      <li><strong>Present Input X</strong> to F1 layer</li>
+      <li><strong>Compute activation</strong> of F2 neurons: T<sub>j</sub> = (X · W<sup>b</sup><sub>j</sub>) / (0.5 + ‖W<sup>b</sup><sub>j</sub>‖₁)</li>
+      <li><strong>Select winner j*</strong> = argmax T<sub>j</sub> (highest activation)</li>
+      <li><strong>Check Vigilance:</strong> Compute match = ‖ X AND W<sup>t</sup><sub>j*</sub> ‖ / ‖ X ‖
+        <ul style="margin-top:8px; padding-left:16px; font-size:14px">
+          <li>If match ≥ ρ → <strong>Resonance!</strong> Update weights, assign X to category j*</li>
+          <li>If match &lt; ρ → <strong>Reset!</strong> Inhibit j*, go to step 3 (try next best)</li>
+        </ul>
+      </li>
+      <li><strong>Create New Category</strong> if all categories fail the vigilance test</li>
+      <li><strong>Update Weights</strong> on resonance:<br>
+        W<sup>b</sup><sub>j*</sub>(new) = (X AND W<sup>t</sup><sub>j*</sub>) / (0.5 + ‖ X AND W<sup>t</sup><sub>j*</sub>‖₁)<br>
+        W<sup>t</sup><sub>j*</sub>(new) = X AND W<sup>t</sup><sub>j*</sub>
+      </li>
+    </ol>
+
+    <h3>Role of Vigilance Parameter ρ</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">High ρ (close to 1)</div>
+        <p style="font-size:14px">Very strict matching. Creates <strong>many fine-grained categories</strong>. Less generalization. Patterns must be very similar to belong to same category.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Low ρ (close to 0)</div>
+        <p style="font-size:14px">Loose matching. Creates <strong>few coarse categories</strong>. More generalization. Very different patterns can belong to same category.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 5 — CHARACTER RECOGNITION
+  ══════════════════════════════════════════ -->
+  <div class="section" id="char-art">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Character Recognition using ART</h2>
+      <span class="exam-badge">⭐ 2023, 2024</span>
+    </div>
+
+    <p>ART networks are well-suited for <strong>optical character recognition (OCR)</strong> because they can learn new characters without forgetting old ones, and can handle slight variations in handwriting.</p>
+
+    <h3>How It Works</h3>
+    <div class="callout">
+      <div class="callout-label">Setup</div>
+      Input: A character image (e.g., 8×8 or 16×16 pixel grid) → flattened into a <strong>binary vector</strong> (pixel ON = 1, pixel OFF = 0). Each ART category corresponds to one character class (A, B, C, ...).
+    </div>
+
+    <ol class="steps">
+      <li><strong>Encode the character:</strong> Convert the letter/digit image into a binary vector X of length N (= total pixels). For example, the letter 'A' on a 5×7 grid becomes a 35-bit vector.</li>
+      <li><strong>Present to ART 1:</strong> Input vector X is sent to the F1 (comparison) layer.</li>
+      <li><strong>Find best matching category:</strong> F2 neurons compete; the one with weights most similar to X wins.</li>
+      <li><strong>Vigilance test:</strong> Check if the winning category's prototype matches X sufficiently (match ratio ≥ ρ).</li>
+      <li><strong>Assign or create:</strong>
+        <ul style="padding-left:16px; font-size:14px; margin-top:6px">
+          <li><em>Match found:</em> X is assigned to the existing character category; weights updated slightly.</li>
+          <li><em>No match:</em> A new category is created for this character variant.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>Example — Recognizing Noisy Characters</h3>
+    <div class="diagram-box" style="text-align:left; padding:20px 28px;">
+      <svg viewBox="0 0 480 130" xmlns="http://www.w3.org/2000/svg" style="max-width:460px; width:100%;">
+        <!-- Clean A -->
+        <text x="30" y="20" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10">Clean 'A'</text>
+        <g fill="#4f9cf9">
+          <rect x="38" y="25" width="8" height="8" rx="1"/>
+          <rect x="46" y="25" width="8" height="8" rx="1"/>
+          <rect x="30" y="33" width="8" height="8" rx="1"/>
+          <rect x="54" y="33" width="8" height="8" rx="1"/>
+          <rect x="30" y="41" width="8" height="8" rx="1"/>
+          <rect x="38" y="41" width="8" height="8" rx="1"/>
+          <rect x="46" y="41" width="8" height="8" rx="1"/>
+          <rect x="54" y="41" width="8" height="8" rx="1"/>
+          <rect x="30" y="49" width="8" height="8" rx="1"/>
+          <rect x="54" y="49" width="8" height="8" rx="1"/>
+          <rect x="30" y="57" width="8" height="8" rx="1"/>
+          <rect x="54" y="57" width="8" height="8" rx="1"/>
+        </g>
+        <!-- Arrow -->
+        <text x="90" y="45" fill="#f9854f" font-family="IBM Plex Mono" font-size="20">→</text>
+        <!-- Binary vector -->
+        <text x="115" y="30" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10">Binary vector</text>
+        <text x="115" y="48" fill="#4ff9a8" font-family="IBM Plex Mono" font-size="10">0,0,1,1,0,0</text>
+        <text x="115" y="60" fill="#4ff9a8" font-family="IBM Plex Mono" font-size="10">0,1,0,1,0,...</text>
+        <!-- Arrow to ART -->
+        <text x="195" y="45" fill="#f9854f" font-family="IBM Plex Mono" font-size="20">→</text>
+        <!-- ART box -->
+        <rect x="225" y="25" width="75" height="50" rx="6" fill="#1c2030" stroke="#c84ff9" stroke-width="1.5"/>
+        <text x="262" y="55" fill="#c84ff9" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">ART 1</text>
+        <!-- Arrow to output -->
+        <text x="310" y="45" fill="#f9854f" font-family="IBM Plex Mono" font-size="20">→</text>
+        <!-- Output -->
+        <rect x="340" y="25" width="120" height="50" rx="6" fill="#2a3a20" stroke="#4ff9a8" stroke-width="1.5"/>
+        <text x="400" y="48" fill="#4ff9a8" font-family="IBM Plex Mono" font-size="11" text-anchor="middle">Category: 'A'</text>
+        <text x="400" y="62" fill="#7a85a3" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">match ≥ ρ ✓</text>
+        <!-- Noisy note -->
+        <text x="30" y="105" fill="#7a85a3" font-family="IBM Plex Mono" font-size="10">Noisy 'A' → same category if ρ is low enough</text>
+        <text x="30" y="120" fill="#f9854f" font-family="IBM Plex Mono" font-size="10">New variant → new category created if match &lt; ρ</text>
+      </svg>
+    </div>
+
+    <h3>Advantages for Character Recognition</h3>
+    <ul class="key-list">
+      <li>Can recognize multiple fonts/handwriting styles as the same character</li>
+      <li>New character sets can be added without retraining the whole network</li>
+      <li>Robust to noise — slightly corrupted images still match correct category</li>
+      <li>ρ can be tuned: low ρ = font-independent recognition; high ρ = font-specific</li>
+      <li>No catastrophic forgetting when new characters/fonts are added</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 6 — VECTOR QUANTIZATION
+  ══════════════════════════════════════════ -->
+  <div class="section" id="vq">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Vector Quantization (VQ)</h2>
+      <span class="exam-badge">🔥 ALL 3 YEARS</span>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">Definition</div>
+      <strong>Vector Quantization</strong> is a lossy data compression technique that maps a large set of input vectors to a smaller set of <em>representative vectors</em> called a <strong>codebook</strong>. Each input vector is approximated by its nearest codebook entry (codeword).
+    </div>
+
+    <h3>Core Concepts</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Codebook</div>
+        <p style="font-size:14px">A set of K prototype vectors {c₁, c₂, ..., c<sub>K</sub>} that represent the entire input space. Also called codewords or code vectors.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Quantization Error</div>
+        <p style="font-size:14px">The distortion introduced by replacing an input X with its nearest codeword. Goal: minimize the average distortion across all inputs.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Voronoi Regions</div>
+        <p style="font-size:14px">The input space is partitioned into K regions, one per codeword. All inputs in a region are approximated by that region's codeword.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Compression Ratio</div>
+        <p style="font-size:14px">Instead of storing the full vector, only store the index of the nearest codeword. log₂(K) bits instead of N×(bits per value).</p>
+      </div>
+    </div>
+
+    <h3>VQ Process</h3>
+    <ol class="steps">
+      <li><strong>Design codebook:</strong> Train to find K representative vectors that minimize distortion (using LBG algorithm or neural network)</li>
+      <li><strong>Encoding:</strong> For each input vector X, find the nearest codeword c<sub>j*</sub>: j* = argmin<sub>j</sub> ‖X − c<sub>j</sub>‖. Transmit/store only the index j*.</li>
+      <li><strong>Decoding:</strong> Receiver looks up the codebook using the index j* to reconstruct the approximate signal.</li>
+    </ol>
+
+    <h3>VQ and Competitive Learning</h3>
+    <p>A competitive learning network naturally implements VQ! Each output neuron's weight vector acts as a <strong>codeword</strong>, and training makes these weight vectors distributed optimally across the input space.</p>
+    <div class="formula">
+      <span class="label">VQ Distortion Measure (to minimize)</span>
+      D = (1/N) · Σᵢ ‖ Xᵢ − c<sub>q(i)</sub> ‖²
+      <br><br>
+      where q(i) = index of nearest codeword to Xᵢ
+    </div>
+
+    <h3>Applications</h3>
+    <ul class="key-list">
+      <li><strong>Image Compression:</strong> Compress image blocks using a codebook of typical block patterns</li>
+      <li><strong>Speech Coding:</strong> Compress speech spectral parameters for transmission</li>
+      <li><strong>Pattern Classification:</strong> Use VQ as a pre-processing/feature extraction step</li>
+      <li><strong>Data Clustering:</strong> Codebook entries represent cluster centroids</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 7 — LVQ
+  ══════════════════════════════════════════ -->
+  <div class="section" id="lvq">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Learning Vector Quantization (LVQ)</h2>
+      <span class="exam-badge">⭐ 2024, 2025</span>
+    </div>
+
+    <div class="callout orange">
+      <div class="callout-label">What is LVQ?</div>
+      <strong>LVQ</strong> is a <em>supervised</em> version of VQ / competitive learning, introduced by Kohonen. Each codebook vector (prototype) has a <strong>class label</strong>. Classification is done by finding the nearest prototype and assigning its label to the input.
+    </div>
+
+    <h3>Key Difference: VQ vs LVQ</h3>
+    <table>
+      <thead><tr><th>Aspect</th><th>VQ</th><th>LVQ</th></tr></thead>
+      <tbody>
+        <tr><td>Learning type</td><td>Unsupervised</td><td>Supervised</td></tr>
+        <tr><td>Labels</td><td>No class labels</td><td>Each prototype has a class label</td></tr>
+        <tr><td>Goal</td><td>Minimize distortion</td><td>Minimize classification error</td></tr>
+        <tr><td>Update rule</td><td>Move toward input</td><td>Move toward if correct, away if wrong</td></tr>
+      </tbody>
+    </table>
+
+    <h3>LVQ Architecture</h3>
+    <ul class="key-list">
+      <li><strong>Input layer:</strong> One neuron per input feature</li>
+      <li><strong>Competitive layer:</strong> M prototype neurons (codewords with class labels)</li>
+      <li>Multiple prototypes can represent the same class</li>
+      <li>Final class = label of nearest prototype</li>
+    </ul>
+
+    <h3>LVQ1 Algorithm (Basic)</h3>
+    <ol class="steps orange">
+      <li><strong>Initialize</strong> prototype vectors W<sub>j</sub> and assign class labels to each</li>
+      <li><strong>Present input</strong> (X, class c(X))</li>
+      <li><strong>Find nearest prototype</strong> j* = argmin ‖X − W<sub>j</sub>‖</li>
+      <li><strong>Update based on classification:
+        <div class="formula" style="margin: 10px 0; font-size:13px">
+          <span class="label">If label(j*) == class(X) → CORRECT → move closer</span>
+          W<sub>j*</sub>(t+1) = W<sub>j*</sub>(t) + α(t) · [X − W<sub>j*</sub>(t)]
+          <br><br>
+          <span class="label">If label(j*) ≠ class(X) → WRONG → push away</span>
+          W<sub>j*</sub>(t+1) = W<sub>j*</sub>(t) − α(t) · [X − W<sub>j*</sub>(t)]
+        </div>
+      </strong></li>
+      <li><strong>Reduce α(t)</strong> and repeat until convergence</li>
+    </ol>
+
+    <h3>LVQ Variants</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" style="color: var(--accent2)">LVQ2 / LVQ2.1</div>
+        <p style="font-size:14px">Updates <strong>two</strong> nearest prototypes when input falls in a "window" near the decision boundary. Improves boundary accuracy. One from same class (reward), one from different class (punish).</p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color: var(--accent4)">LVQ3</div>
+        <p style="font-size:14px">Like LVQ2.1 but also updates when both nearest prototypes belong to the <strong>same class</strong>. Prevents prototypes from drifting away from class clusters.</p>
+      </div>
+    </div>
+
+    <h3>Applications of LVQ</h3>
+    <ul class="key-list">
+      <li>Speech recognition (phoneme classification)</li>
+      <li>Medical diagnosis (classify ECG patterns)</li>
+      <li>Adaptive pattern classification in noisy environments</li>
+      <li>Fast classification when training data is large</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 8 — FEATURE MAPPING
+  ══════════════════════════════════════════ -->
+  <div class="section" id="feature">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Feature Mapping &amp; Pattern Clustering</h2>
+      <span class="exam-badge">🔥 ALL 3 YEARS</span>
+    </div>
+
+    <h3>Pattern Clustering</h3>
+    <p>Clustering is the automatic grouping of similar input patterns without labels. Competitive learning networks perform clustering by assigning each pattern to the nearest weight vector (cluster center).</p>
+    <div class="callout">
+      <div class="callout-label">Clustering in Competitive Networks</div>
+      After training, each output neuron represents a <strong>cluster centroid</strong>. Patterns that activate the same output neuron belong to the same cluster. This is equivalent to K-means clustering where K = number of output neurons.
+    </div>
+
+    <h3>Feature Mapping</h3>
+    <p>Feature mapping refers to the process of projecting high-dimensional input space into a lower-dimensional representation while <strong>preserving important structure</strong> (topology, distances, neighborhood relationships).</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">What is preserved?</div>
+        <ul>
+          <li style="font-size:14px">Topological neighborhood</li>
+          <li style="font-size:14px">Relative distances between patterns</li>
+          <li style="font-size:14px">Statistical regularities</li>
+          <li style="font-size:14px">Cluster structure</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Applications</div>
+        <ul>
+          <li style="font-size:14px">Data visualization</li>
+          <li style="font-size:14px">Speech feature mapping</li>
+          <li style="font-size:14px">Sensor fusion</li>
+          <li style="font-size:14px">Robot sensory-motor mapping</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Computer Simulations (SOM Use Cases)</h3>
+    <ul class="key-list">
+      <li><strong>Travelling Salesman Problem:</strong> SOM finds approximate shortest routes</li>
+      <li><strong>Color Map Generation:</strong> Map 3D color space (RGB) to 2D for displays</li>
+      <li><strong>Speech Phoneme Map:</strong> SOM of speech features clusters phonemes spatially</li>
+      <li><strong>Kohonen's Phonotopic Map:</strong> Different speech sounds map to different spatial regions</li>
+      <li><strong>Dimensionality Reduction:</strong> Visualize high-dimensional datasets in 2D</li>
+    </ul>
+
+    <h3>Adaptive Pattern Classification</h3>
+    <p>Using LVQ/competitive networks for classification that <em>adapts over time</em>:</p>
+    <ul class="key-list">
+      <li>Prototypes dynamically move to better represent their classes</li>
+      <li>Decision boundaries adjust as new patterns arrive</li>
+      <li>Combines benefits of unsupervised feature extraction (SOM) with supervised classification (LVQ)</li>
+      <li>Two-stage approach: First SOM for feature mapping, then LVQ for classification</li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       EXAM SUMMARY
+  ══════════════════════════════════════════ -->
+  <div class="section" id="summary">
+    <div class="section-header">
+      <span class="section-num">✦</span>
+      <h2>Quick Exam Reference</h2>
+    </div>
+
+    <h3>Must-Know Formulas</h3>
+    <div class="formula">
+      <span class="label">1. Competitive Learning — Find Winner</span>
+      j* = argmin ‖ X − W<sub>j</sub> ‖
+    </div>
+    <div class="formula">
+      <span class="label">2. Competitive Learning — Weight Update</span>
+      W<sub>j*</sub>(new) = W<sub>j*</sub>(old) + α(X − W<sub>j*</sub>)
+    </div>
+    <div class="formula">
+      <span class="label">3. SOM — BMU Selection</span>
+      j* = argmin<sub>j</sub> ‖ X(t) − W<sub>j</sub>(t) ‖²
+    </div>
+    <div class="formula">
+      <span class="label">4. SOM — Neighborhood Function</span>
+      h(j, j*, t) = exp( −‖r<sub>j</sub> − r<sub>j*</sub>‖² / 2σ²(t) )
+    </div>
+    <div class="formula">
+      <span class="label">5. SOM — Weight Update (all in neighborhood)</span>
+      W<sub>j</sub>(t+1) = W<sub>j</sub>(t) + α(t) · h(j, j*, t) · [X(t) − W<sub>j</sub>(t)]
+    </div>
+    <div class="formula">
+      <span class="label">6. LVQ1 — Correct Classification</span>
+      W<sub>j*</sub> += α(X − W<sub>j*</sub>)  [move closer]
+      <br>
+      W<sub>j*</sub> −= α(X − W<sub>j*</sub>)  [move away — wrong class]
+    </div>
+    <div class="formula">
+      <span class="label">7. ART — Vigilance Check</span>
+      Match = ‖ X AND W<sup>t</sup><sub>j*</sub> ‖ / ‖ X ‖  ≥  ρ
+    </div>
+
+    <h3>Key Comparisons for Exams</h3>
+    <table>
+      <thead><tr><th>Network</th><th>Supervised?</th><th>Output</th><th>Key Feature</th></tr></thead>
+      <tbody>
+        <tr><td>Competitive Learning</td><td>No</td><td>Cluster label</td><td>Winner-takes-all</td></tr>
+        <tr><td>SOM</td><td>No</td><td>2D map</td><td>Topology preservation</td></tr>
+        <tr><td>ART</td><td>No</td><td>Category</td><td>Stability-plasticity</td></tr>
+        <tr><td>VQ</td><td>No</td><td>Codeword index</td><td>Compression / codebook</td></tr>
+        <tr><td>LVQ</td><td>Yes</td><td>Class label</td><td>Reward/punish prototypes</td></tr>
+      </tbody>
+    </table>
+
+    <h3>One-Line Definitions (for short answers)</h3>
+    <ul class="key-list">
+      <li><strong>Competitive Learning:</strong> Winner-takes-all unsupervised learning where only the closest neuron's weights are updated.</li>
+      <li><strong>SOM:</strong> A Kohonen network that maps high-dimensional inputs to a 2D topology-preserving grid.</li>
+      <li><strong>BMU:</strong> Best Matching Unit — the SOM output neuron with weights closest to the input.</li>
+      <li><strong>ART:</strong> Self-organizing network that resolves the stability-plasticity dilemma via a vigilance parameter.</li>
+      <li><strong>Vigilance (ρ):</strong> ART parameter controlling how strict the match must be to assign input to existing category.</li>
+      <li><strong>Vector Quantization:</strong> Lossy compression mapping inputs to nearest codeword in a trained codebook.</li>
+      <li><strong>LVQ:</strong> Supervised VQ where labeled prototypes move toward correct inputs and away from incorrect ones.</li>
+      <li><strong>Feature Map:</strong> Low-dimensional representation of input space preserving topological structure.</li>
+    </ul>
+
+    <div class="callout red" style="margin-top:28px">
+      <div class="callout-label">🔥 Top 3 Most Likely Long Questions</div>
+      <strong>1.</strong> Explain the SOM architecture and describe the SOM algorithm step by step with equations.<br><br>
+      <strong>2.</strong> What is ART network? Explain its architecture, features, and the role of vigilance parameter. How is it used for character recognition?<br><br>
+      <strong>3.</strong> Explain Vector Quantization. How does LVQ differ from VQ? Describe the LVQ1 algorithm.
+    </div>
+  </div>
+
+</main>
+</div>
+
+</body>
+</html>
